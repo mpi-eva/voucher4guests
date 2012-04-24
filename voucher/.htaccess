@@ -1,0 +1,3 @@
+RewriteEngine on
+RewriteBase /
+RewriteRule !index.php|mobil/index.php|validity.php|mobil/validity.php|help_en.html|help_de.html|agree.php|mobil/agree.php|pdf(//*)|images(//*)|includes(//*)|login.php$ /index.php

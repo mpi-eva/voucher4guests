@@ -1,0 +1,48 @@
+###############################################################################
+README  is part of the voucher4guests Project
+AUTHOR Alexander Mueller, alexander_mueller at eva dot mpg dot de
+AUTHOR Lars Uhlemann, lars_uhlemann at eva dot mpg dot de
+VERSION 0.4
+COPYRIGHT AND LICENSE 
+
+(c) Lars Uhlemann Alexander Mueller
+
+This software is released under GPLv2 license - see 
+http://www.gnu.org/licenses/gpl-2.0.html
+##############################################################################
+
+VOUCHER4GUESTS
+
+The aim of voucher4guests project is to develop and distribute a voucher 
+solution (Captive Portal) for the internal guest networks of .
+
+The project were developed regarding to the following aspects:
+
+    full compliant to the requirements of guest networks within the ...
+    covers the complete organizational work flow
+    reducing the organizational demand to a minimum
+    multi vendor-capability (network hardware)
+    completely based on open source
+
+STATUS of project
+
+-technical part is complete
+-installation script is complete
+-documentation is finished  
+
+CONTACT
+
+email: voucher4guests@eva.mpg.de
+
+TECHNICAL APPROACH
+
+The project is based on a host which acts as a layer 3 gateway between two subnets.
+The first subnet connect's the gateway to internet, second one contains the guest
+clients. Each client that want to connect to internet must pass the gateway. On the 
+gateway itself traffic coming from client net (guestnet) will be firewalled.
+That means that each client which is not known or not activated by a valid voucher 
+will be forwarded automatically to the registration website located on the
+gateway itself. Each client that is/was activated and his voucher is still valid
+can pass the gateway and connect to the internet. The central token to identify and
+handle the traffic of each client is their worldwide uniqe mac address.
+

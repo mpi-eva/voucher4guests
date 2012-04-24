@@ -1,0 +1,133 @@
+#!/bin/bash
+###############################################################################
+#NAME voucher.fw  is part of the voucher4guests Project
+#SYNOPSIS initialize local firewall 
+#DESCRIPTION initialize local firewall and insert active mac addresses from
+#voucher database
+#AUTHOR Lars Uhlemann, lars_uhlemann at eva dot mpg dot de
+#AUTHOR Alexander Mueller, alexander_mueller at eva dot mpg dot de
+#VERSION 0.4
+#COPYRIGHT AND LICENSE 
+#
+#(c) Lars Uhlemann Alexander Mueller
+#
+#This software is released under GPLv2 license - see 
+#http://www.gnu.org/licenses/gpl-2.0.html
+##############################################################################
+
+
+echo "1" > /proc/sys/net/ipv4/ip_forward # initialize forwarding 
+
+IPTABLES="/sbin/iptables"
+
+# guest interface with ip definition 
+IFACE2GUEST="eth0"
+IP4GUEST_IF="172.16.1.1"
+
+# internet uplink interface with ip definition
+IFACE2INTERNET="eth1"
+IP4INTERNET_IF="172.16.2.2"
+
+# OPTIONAL management interface 
+#IFACE2MGMT="eth2"
+
+
+
+# reset/delete iptables rules/queue and statements
+$IPTABLES -F
+$IPTABLES -F -t nat 
+$IPTABLES -X GUEST -t nat
+$IPTABLES -X GUEST_LOG -t nat
+$IPTABLES -X 
+
+$IPTABLES -P INPUT DROP
+$IPTABLES -P FORWARD DROP
+$IPTABLES -P OUTPUT DROP 
+
+
+# allow established connections 
+$IPTABLES -A INPUT  -m state --state ESTABLISHED,RELATED -j ACCEPT
+$IPTABLES -A OUTPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+
+# deny spoofing 
+$IPTABLES -A FORWARD  -i $IFACE2INTERNET  -s $IP4INTERNET_IF  -j DROP 
+$IPTABLES -A FORWARD  -i $IFACE2GUEST  -s $IP4GUEST_IF  -j DROP 
+$IPTABLES -A INPUT  -i $IFACE2INTERNET  -s $IP4INTERNET_IF  -j DROP 
+$IPTABLES -A INPUT  -i $IFACE2GUEST  -s $IP4GUEST_IF  -j DROP 
+
+# alow ping
+$IPTABLES -N icmp_chain
+$IPTABLES -A INPUT -p icmp -j icmp_chain
+$IPTABLES -A icmp_chain -p icmp -m icmp --icmp-type 11/0 -j ACCEPT
+$IPTABLES -A icmp_chain -p icmp -m icmp --icmp-type 11/1 -j ACCEPT
+$IPTABLES -A icmp_chain -p icmp -m icmp --icmp-type 8/0 -j ACCEPT
+
+# allow traffic to lo interface
+$IPTABLES -A INPUT -i lo -m state --state NEW -j ACCEPT
+
+# OPTIONAL allow ssh access over management interface
+#$IPTABLES -A INPUT -i $IFACE2MGMT -p tcp --dport 22 -j ACCEPT
+
+# OPTIONAL POSSIBLE SECURITY PROBLEM when active
+# allow ssh access over internet uplink interface
+#$IPTABLES -A INPUT -i $IFACE2INTERNET -p tcp --dport 22 -j ACCEPT
+
+# OPTIONAL allow https over management interface to create/print voucher
+#$IPTABLES -A INPUT -i $IFACE2MGMT -p tcp --dport 443 -j ACCEPT
+
+# OPTIONAL allow dhcp discover(broadcast) (gateway is also the dhcp server of guestnet)
+#$IPTABLES -A INPUT -i $IFACE2GUEST -p udp --dport 67 -j ACCEPT
+
+# OPTIONAL allow dns access (gateway is also dns server)
+#$IPTABLES -A INPUT -i $IFACE2GUEST -p tcp --dport 53 -j ACCEPT 
+#$IPTABLES -A INPUT -i $IFACE2GUEST -p udp --dport 53 -j ACCEPT 
+
+# Access to vouchergw website (register vouchers)
+$IPTABLES -A INPUT -i $IFACE2GUEST -p tcp --dport 80 -j ACCEPT
+
+# redirect whole traffic in to GUEST queue before routing
+$IPTABLES -t nat -N GUEST
+$IPTABLES -A PREROUTING -t nat -j GUEST
+
+# mark unaccepted packets which are not active and  not valid 
+$IPTABLES -A GUEST -t nat -j CONNMARK --set-mark 99
+
+# redirect http traffic to vouchergw website
+$IPTABLES -A GUEST -t nat -p tcp --dport 80 -j DNAT --to-destination $IP4GUEST_IF:80
+$IPTABLES -A GUEST -t nat -p tcp --dport 8080 -j DNAT --to-destination $IP4GUEST_IF:80
+
+
+# allow already established connection
+$IPTABLES -A FORWARD -i $IFACE2INTERNET -o $IFACE2GUEST -m state --state ESTABLISHED,RELATED -j ACCEPT
+
+# drop all packets with mark 99 and allow all other packets
+$IPTABLES -A FORWARD -m connmark --mark 99 -j DROP
+$IPTABLES -A FORWARD -i $IFACE2GUEST -o $IFACE2INTERNET -j ACCEPT
+
+# OPTIONAL activate NAT on outgoing interface  
+#$IPTABLES -t nat -A POSTROUTING -o $IFACE2INTERNET -j MASQUERADE
+
+#allow new output connections 
+$IPTABLES -A OUTPUT -m state --state NEW -j ACCEPT
+
+# loging only traffic to outside
+$IPTABLES -N GUEST_LOG -t nat
+$IPTABLES -I PREROUTING 1 -t nat -i $IFACE2GUEST -m state --state NEW -j GUEST_LOG
+$IPTABLES -A GUEST_LOG -t nat -d $IP4GUEST_IF -j RETURN
+$IPTABLES -A GUEST_LOG -t nat -j LOG --log-prefix "voucher2log "
+
+
+# OPTIONAL allow this mac to pass the gateway directly
+#$IPTABLES -I GUEST 1 -t nat -m mac --mac-source xx:xx:xx:xx:xx:xx  -j ACCEPT
+#
+
+# read active mac addresses from db an add them to fw rule table
+result=`mysql --user="db_user" --password="mpi" -D voucher --execute="SELECT mac FROM vouchers WHERE activ='1' && canceled='0' && mac != ''" | tail -n +2 | sed 's/\([0-9a-fA-F]\{2\}\)/\1:/g; s/:$//'`
+
+array=($result)
+
+for ((i=0; i<${#array[*]}; i++)) do
+	$IPTABLES -I GUEST 1 -t nat -m mac --mac-source ${array[$i]} -j ACCEPT 
+done
+
+
