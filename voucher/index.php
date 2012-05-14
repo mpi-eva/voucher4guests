@@ -5,7 +5,7 @@ NAME index.php is part of the voucher4guests Project
 SYNOPSIS root user php of project 
 DESCRIPTION root user php of project
 AUTHORS Alexander Mueller, alexander_mueller at eva dot mpt dot de
-VERSION 0.4
+VERSION 0.4b
 COPYRIGHT AND LICENSE 
 
 (c) Alexander Mueller Lars Uhlemann
@@ -24,22 +24,22 @@ if($match !== 0) {
         exit;
 }
 
+if(!isset($_GET['add'])) {
+	$add = '';
+} else {
+	$add = $_GET['add'];	
+}
+
 if(!isset($_GET['mobil']) || $_GET['mobil'] != "off") {
 	$mobil = 'on';
 	
 	require_once('includes/mobile_detect.php');
 	$detect = new Mobile_Detect();
 	if ($detect->isMobile()) {
-		header("Location: http://" .$_SERVER['HTTP_HOST']. "/mobil/index.php");	
+		header("Location: http://" .$_SERVER['HTTP_HOST']. "/mobil/index.php?add=".$add);	
 	}
 } else {
 	$mobil = 'off';	
-}
-
-if(!isset($_GET['add'])) {
-	$add = '';
-} else {
-	$add = $_GET['add'];	
 }
 
 if(!isset($_GET['ssl']) || $_GET['ssl'] != '1') {
