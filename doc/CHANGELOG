@@ -34,3 +34,5 @@ http://www.gnu.org/licenses/gpl-2.0.html
 
 0.4a	-bug fix in voucher lifecycle management
 	-install.sh including missing packet php5-cli
+
+04.b	-bug fix in forwarding mobile devices (voucher/index.php)
