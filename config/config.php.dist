@@ -1,0 +1,49 @@
+<?php
+/**
+ * Application Configuration
+ */
+
+return array(
+    /**
+     * Fully qualified domain name
+     */
+    'domain_name' => 'example.de',
+
+    /**
+     * Supported languages
+     *
+     * use ISO 639-1 Language Codes
+     */
+    'supported_languages' => array(
+        'de' => array('de', 'de_DE'),
+        'en' => array('en', 'en_US')
+    ),
+
+    /**
+     * Default language
+     */
+    'default_language' => 'en',
+
+    /**
+     * Language names
+     */
+    'language_names' => array(
+        'de' => 'Deutsch',
+        'en' => 'English'
+    ),
+
+    /**
+     * Redirect user to originally requested url
+     */
+    'redirect_user' => true,
+
+    /**
+    * Maximum number of registered devices (MACs) per voucher
+    */
+    'max_devices' => 3,
+
+    /**
+     * Allowed characters for the voucher code
+     */
+    'allowed_characters' => array('a','b','c','d','e','f','g','h','j','k','m','n','p','q','r','s','t','u','v','w','x','y','z','2','3','4','5','6','7','8','9'),
+);

@@ -6,11 +6,11 @@
  * Enter your local connection settings here.
  */
 
-$conf = array(
+return array(
     /**
      * Database name
      */
-    'db_base' => 'voucher',
+    'db_base' => 'voucher4guests',
 
     /**
      * Database user
@@ -27,4 +27,3 @@ $conf = array(
      */
     'db_host' => 'localhost',
 );
-
