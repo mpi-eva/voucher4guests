@@ -15,110 +15,155 @@ This software is released under GPLv2 license - see
 http://www.gnu.org/licenses/gpl-2.0.html
 */
 
-require_once('includes/redirect.php');
+session_start();
+require_once 'language/Language.php';
+require_once 'includes/VoucherService.php';
 
-if(!isset($_GET['mobil']) || $_GET['mobil'] != "off") {
-	$mobil = 'on';
-} else {
-	$mobil = 'off';	
-}
+// load config
+$config = include($_SERVER['DOCUMENT_ROOT'] . '/../config/config.php');
 
-if(!isset($_GET['add'])) {
-	$add = '';
-} else {
-	$add = $_GET['add'];	
-}
+$languages = new Language();
+$language = $languages->detectLanguage();
 
-if(!isset($_GET['ssl']) || $_GET['ssl'] != '1') {
-	$ssl = "0";
-} else {
-	$ssl = "1";
-}
-
-$lang_array = array('de', 'en');
-if(!isset($_GET['lang'])) $language = 'en';
-
-if(isset($_GET['lang']) && in_array($_GET['lang'], $lang_array)){ 
-  $language = $_GET['lang'];
-}
+// set language in session
+$_SESSION['language'] = $language;
+$languageName = $languages->getLanguageName();
 require_once('language/'.$language.'.php');
+
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="de" lang="de">
+<!DOCTYPE html>
+<html lang="<?php echo $language; ?>">
+
 <head>
-<title><?php echo $lang['PageTitle']; ?></title>
-<meta http-equiv="content-type" content="text/html;charset=iso-8859-1" />
-<link rel="stylesheet" href="includes/css/layout.css" type="text/css"/>
-<link rel="shortcut icon" href="images/favicon.ico" />
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="Captive Portal System">
+	<meta name="author" content="voucher4guests">
+	<link rel="icon" type="image/png" href="includes/images/favicon-32x32.png" sizes="32x32">
+	<link rel="icon" type="image/png" href="includes/images/favicon-16x16.png" sizes="16x16">
+
+	<title><?php echo $lang['PageTitle']; ?></title>
+
+	<!-- Bootstrap CSS -->
+	<link href="includes/css/bootstrap.min.css" rel="stylesheet">
+	<link href="includes/css/ionicons.min.css" rel="stylesheet" type="text/css" />
+	<!-- Custom styles -->
+	<link href="includes/css/style.css" rel="stylesheet">
+	<link href="includes/css/color.css" rel="stylesheet">
 </head>
+
 <body>
-<div id="wrap">
-<div id="top"><div class="time"><?php echo date("d.m.Y - H:i") ?></div></div>
-<div id="header">
-	<img src="images/logo_<?php echo $language; ?>.jpg" alt="Logo" class="logo" /><h1><?php echo $lang['HeaderTitle']; ?></h1>
-    <ul class="language">
-    	<li id="language_en"><a href="validity.php?lang=en<?php echo '&add='.$add.'&mobil='.$mobil.'&ssl='.$ssl; ?>">English</a></li>
-    	<li id="language_de"><a href="validity.php?lang=de<?php echo '&add='.$add.'&mobil='.$mobil.'&ssl='.$ssl; ?>">Deutsch</a></li>
-    </ul>
+<div class="container main">
+	<div class="header clearfix">
+		<nav>
+			<ul class="nav nav-pills pull-right">
+				<li role="presentation" class="dropdown navbar-right nav-lang">
+
+					<?php
+					// language select menu
+					print '<a class="dropdown-toggle" data-toggle="dropdown" href="?lang='.$language.'" role="button" aria-haspopup="true" aria-expanded="false">
+                            '.$languageName[$language].' <span class="caret"></span></a>';
+
+					print '<ul class="dropdown-menu">';
+					foreach ($languageName as $key => $value){
+						if ($key != $language){
+							print '<li><a href="?lang='.$key.'">'.$value.'</a></li>';
+						}
+					}
+					print '</ul>';
+
+					?>
+
+				</li>
+			</ul>
+		</nav>
+		<!-- Text Logo -->
+		<!--<h3 class="text-muted">LOGO</h3>-->
+
+		<!-- Image Logo -->
+		<img class="img-responsive" src="includes/images/Logo.png" alt="Logo" height="80" width="415">
+	</div>
+	<div class="row">
+		<div class="col-sm-12">
+			<p>
+				<a class="btn btn-default res-btn" role="button" href="index.php"><i class="icon ion-chevron-left"></i>&nbsp; <?php echo $lang['GoToStart']; ?></a>
+			</p>
+
+			<div class="panel panel-default">
+				<div class="panel-heading"><?php echo $lang['ValidityHeadline']; ?></div>
+				<div class="panel-body">
+					<p><?php echo $lang['ValidityDesc']; ?></p>
+
+					<?php
+					$validity = VoucherService::get_validity();
+
+					if ($validity['activated']):
+						?>
+						<div class="well">
+							<p><?php echo sprintf($lang['activatedTo'], '<strong>'.$validity['expiration_date'].'</strong>'); ?></p>
+							<p><?php echo $lang['VoucherCode']; ?> <?php echo $validity['voucher_code']; ?></p>
+
+							<?php  if ($validity['remaining'] == 0): ?>
+								<p><?php echo $lang['noRemainingActivations']; ?></p>
+							<?php else: ?>
+								<p><?php echo sprintf($lang['remainingActivations'], '<strong>'.$validity['remaining'].'</strong>'); ?></p>
+							<?php endif; ?>
+
+						</div>
+
+					<?php else: ?>
+
+						<div class="alert alert-info" role="alert">
+							<i class="icon ion-information-circled"></i>&nbsp;<?php echo $lang['NoValidity']; ?>
+						</div>
+					<?php endif; ?>
+				</div>
+			</div>
+			<div class="panel panel-default">
+				<div class="panel-heading"><?php echo $lang['LogoutHeadline']; ?></div>
+				<div class="panel-body">
+					<p><?php echo $lang['LogoutDesc']; ?></p>
+
+
+					<?php
+					if ( isset($_POST["logout"])):
+						$logout = VoucherService::logout();
+						if($logout){
+							?>
+							<div class="alert alert-success" role="alert">
+								<i class="icon ion-checkmark"></i>&nbsp;<?php echo $lang['LogoutWorks']; ?>
+							</div>
+						<?php } else { ?>
+							<div class="alert alert-info" role="alert">
+								<i class="icon ion-information-circled"></i>&nbsp;<?php echo $lang['NotActivated']; ?>
+							</div>
+						<?php } ?>
+					<?php else: ?>
+						<?php  if ($validity['activated'] ): ?>
+							<form name="logout" id="form_logout" action="<?php echo $_SERVER['PHP_SELF']?>" method="post">
+								<button class="btn btn-primary" type="submit" name="logout"><i class="icon ion-log-out"></i>&nbsp; <?php echo $lang['Logout']; ?></button>
+							</form>
+						<?php else: ?>
+							<div class="alert alert-info" role="alert">
+								<i class="icon ion-information-circled"></i>&nbsp;<?php echo $lang['NotActivated']; ?>
+							</div>
+						<?php endif; ?>
+					<?php endif; ?>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<footer class="footer text-center">
+		<p><?php echo $lang['Footer']; ?></p>
+	</footer>
 </div>
+<!-- /container -->
 
-<div id="content">
-		
-		<div class="outer_content">
+<script src="includes/js/jquery-1.11.3.min.js"></script>
+<script src="includes/js/bootstrap.min.js"></script>
 
-       <?php 
-          echo $lang['ValidityContent'];              
-          
-          require_once('includes/validity_function.php');
-          
-    		 list($set, $voucher, $date, $mac) = validity();
-    		           
-          if($set == "true") {
-          	printf($lang['ShowValidity'], $date, $voucher, $mac);    	
-          }else {				
-				echo $lang['NoValidity'];
-			 }
-		 ?> 
-
-       <p>&nbsp;</p>	
-
-       <?php echo $lang['LogoutContent']; ?>
-       <p>
-       <?php
-         if ( isset($_POST["logout"])) {
-            $ilogout=$_POST["logout"];
-         } else {
-            $ilogout="";
-         }
-       
-	    	if($ilogout == $lang["Logout"]) {
-			   require_once('includes/logout_function.php');
-			 
-			   $logout = logout();
-  			     
-			   if($logout){
-			     echo $lang['LogoutWorks'];	
-			   }else{
-			     echo $lang['NoLogout'];	
-			   }
-					
-		  }else{	
-		 ?>     
-           <form name="Formular" action="validity.php<?php echo '?lang='.$language.'&add='.$add.'&mobil='.$mobil.'&ssl='.$ssl; ?>" method="post" onsubmit="return chkFormular()">    
-		        <input type="submit" class="submit" value='<?php echo $lang["Logout"]; ?>' name="logout" style="float:left; margin-left:10px;" />
-		     </form> 
-		 <?php } ?> 
-		 </p>
-		 <p>&nbsp;</p> 
-		 <p>&nbsp;</p> 	      
-   
-        &bull;&nbsp;&nbsp;<a href="index.php<?php echo '?lang='.$language.'&add='.$add.'&mobil='.$mobil.'&ssl='.$ssl ?>"><?php echo $lang['GoToStart']; ?></a>
-      
-     </div>
-     
-</div>
-</div>
-
-<div id="footer"><p><?php echo $lang['Footer']; ?></p></div>
+<!-- Custom script -->
+<script src="includes/js/app.js"></script>
 </body>
 </html>

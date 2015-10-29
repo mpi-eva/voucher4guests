@@ -14,134 +14,205 @@ This software is released under GPLv2 license - see
 http://www.gnu.org/licenses/gpl-2.0.html
 */
 
+session_start();
+require_once 'includes/redirect.php';
+require_once 'includes/VoucherService.php';
+require_once 'language/Language.php';
 
-require_once('includes/redirect.php');
+// load config
+$config = include($_SERVER['DOCUMENT_ROOT'] . '/../config/config.php');
 
-$match = strpos($_SERVER["REQUEST_URI"],$_SERVER["PHP_SELF"]);
 
-if($match !== 0) {
-        header("location:http://".$servername."/index.php");
+if(isset($_GET['origin_url'])) {
+    $_SESSION['origin_url'] = $_GET['origin_url'];
+}
+
+if (isset($_POST['voucher_code']) AND !empty($_POST['voucher_code'])) {
+    $voucher_code = VoucherService::format_voucher_code($_POST['voucher_code']);
+    $message = VoucherService::login($voucher_code);
+
+    // redirect, if origin url is given
+    if ($message = VoucherService::MESSAGE_ACTIVATION_SUCCESSFUL
+        AND !empty($_SESSION['origin_url'])
+        AND $config['redirect_user']){
+        header("location:http://".$_SESSION['origin_url']);
         exit;
+    }
 }
 
-if(!isset($_GET['add'])) {
-	$add = '';
-} else {
-	$add = $_GET['add'];	
-}
+$languages = new Language();
+$language = $languages->detectLanguage();
 
-if(!isset($_GET['mobil']) || $_GET['mobil'] != "off") {
-	$mobil = 'on';
-	
-	require_once('includes/mobile_detect.php');
-	$detect = new Mobile_Detect();
-	if ($detect->isMobile()) {
-		header("Location: http://" .$_SERVER['HTTP_HOST']. "/mobil/index.php?add=".$add);	
-	}
-} else {
-	$mobil = 'off';	
-}
-
-if(!isset($_GET['ssl']) || $_GET['ssl'] != '1') {
-	$ssl = "0";
-} else {
-	$ssl = "1";
-}
-
-$err_array = array('0', '1', '2', '3', '4', '5', '10', '11');
-if(!isset($_GET['err'])) $err = '0';
-
-if(isset($_GET['err']) && in_array($_GET['err'], $err_array)){ 
-  $err = $_GET['err'];
-}
-
-$lang_array = array('de', 'en');
-if(!isset($_GET['lang'])) $language = 'en';
-
-if(isset($_GET['lang']) && in_array($_GET['lang'], $lang_array)){ 
-  $language = $_GET['lang'];
-}
-
-
+// set language in session
+$_SESSION['language'] = $language;
+$languageName = $languages->getLanguageName();
 require_once('language/'.$language.'.php');
 
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="de" lang="de">
+<!DOCTYPE html>
+<html lang="<?php echo $language; ?>">
+
 <head>
-<title><?php echo $lang['PageTitle']; ?></title>
-<meta http-equiv="content-type" content="text/html;charset=iso-8859-1" />
-<link rel="stylesheet" href="includes/css/layout.css" type="text/css"/>
-<link rel="shortcut icon" href="images/favicon.ico" />
-<script src="includes/script.js" type="text/javascript"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Captive Portal System">
+    <meta name="author" content="voucher4guests">
+    <link rel="icon" type="image/png" href="includes/images/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="includes/images/favicon-16x16.png" sizes="16x16">
+
+    <title><?php echo $lang['PageTitle']; ?></title>
+
+    <!-- Bootstrap CSS -->
+    <link href="includes/css/bootstrap.min.css" rel="stylesheet">
+    <link href="includes/css/ionicons.min.css" rel="stylesheet" type="text/css" />
+    <!-- Custom styles -->
+    <link href="includes/css/style.css" rel="stylesheet">
+    <link href="includes/css/color.css" rel="stylesheet">
 </head>
+
 <body>
-<div id="wrap">
-<div id="top"><div class="time"><?php echo date("d.m.Y - H:i") ?></div></div>
-<div id="header">
-<img src="images/logo_<?php echo $language; ?>.jpg" alt="Logo" class="logo" /><h1><?php echo $lang['HeaderTitle']; ?></h1>
-    <ul class="language">
-       <li id="language_en"><a href="index.php?lang=en<?php echo '&add='.$add.'&mobil='.$mobil.'&ssl='.$ssl.'&err='.$err; ?>">English</a></li>
-       <li id="language_de"><a href="index.php?lang=de<?php echo '&add='.$add.'&mobil='.$mobil.'&ssl='.$ssl.'&err='.$err; ?>">Deutsch</a></li>
-    </ul>
+<div class="container main">
+    <div class="header clearfix">
+        <nav>
+            <ul class="nav nav-pills pull-right">
+                <li role="presentation" class="dropdown navbar-right nav-lang">
+
+                    <?php
+                    // language select menu
+                    print '<a class="dropdown-toggle" data-toggle="dropdown" href="?lang='.$language.'" role="button" aria-haspopup="true" aria-expanded="false">
+                            '.$languageName[$language].' <span class="caret"></span></a>';
+
+                    print '<ul class="dropdown-menu">';
+                    foreach ($languageName as $key => $value){
+                        if ($key != $language){
+                            print '<li><a href="?lang='.$key.'">'.$value.'</a></li>';
+                        }
+                    }
+                    print '</ul>';
+
+                    ?>
+
+                </li>
+            </ul>
+        </nav>
+        <!-- Text Logo -->
+        <!--<h3 class="text-muted">LOGO</h3>-->
+
+        <!-- Image Logo -->
+        <img class="img-responsive" src="includes/images/Logo.png" alt="Logo" height="80" width="415">
+    </div>
+
+    <div class="row">
+        <div class="col-sm-5">
+
+            <div class="box">
+                <form name="voucher" id="form_voucher" action="<?php echo $_SERVER['PHP_SELF']?>" method="post">
+
+                    <div class="box-header text-center">
+                        <h4 class="text-primary"><?php echo $lang['HeaderTitle']; ?></h4>
+                        <hr>
+                    </div>
+                    <?php
+                    // Error Messages
+                    if (!empty($message)){
+                        switch($message){
+                            case(VoucherService::MESSAGE_ACTIVATION_SUCCESSFUL):
+                                $alert_class = "alert-success";
+                                $alert_icon = "ion-checkmark";
+                                $message_text = $lang['ActivationCompleted'];
+                                break;
+                            case(VoucherService::MESSAGE_INVALID_VOUCHER):
+                                $alert_class = "alert-warning";
+                                $alert_icon = "ion-alert";
+                                $message_text = $lang['InvalidVoucher'];
+                                break;
+                            case(VoucherService::MESSAGE_DEVICE_ALREADY_ACTIVATED):
+                                $alert_class = "alert-success";
+                                $alert_icon = "ion-checkmark";
+                                $message_text = $lang['ActivatedVoucher'];
+                                break;
+                            case(VoucherService::MESSAGE_EXPIRED_VOUCHER):
+                                $alert_class = "alert-warning";
+                                $alert_icon = "ion-alert";
+                                $message_text = $lang['ExpiredVoucher'];
+                                break;
+                            case(VoucherService::MESSAGE_NOT_ACTIVATED_VOUCHER):
+                                $alert_class = "alert-warning";
+                                $alert_icon = "ion-alert";
+                                $message_text = $lang['NotActivatedVoucher'];
+                                break;
+                            case(VoucherService::MESSAGE_MAX_DEVICES_ACTIVATED):
+                                $alert_class = "alert-warning";
+                                $alert_icon = "ion-alert";
+                                $message_text = $lang['MaxDevicesActivated'];
+                                break;
+                        }
+                        if (isset($alert_class) AND isset($alert_icon) AND isset($message_text)){
+                            print '<div class="alert '.$alert_class.'">';
+                            print '<i class="icon '.$alert_icon.'"></i>&nbsp;&nbsp;'.$message_text;
+                            print '</div>';
+                        }
+                    }
+                    ?>
+
+                    <label><?php echo $lang['LableVoucherCode']; ?></label>&nbsp;&nbsp;<a class="pull-right pointer-link" data-toggle="modal" data-target="#myModal"><i class="icon ion-help-circled"></i>&nbsp;<?php echo $lang['Help']; ?></a>
+                    <input type="text" class="form-control input_txt" name="voucher_code" id="voucher_code" />
+
+                    <br/>
+                    <p><?php echo $lang['Accept']; ?> <a href="policy.php" target="_blank"><?php echo $lang['Policy']; ?></a>.</p>
+                    <div class="box-footer text-center">
+                        <input class="btn btn-primary" type="submit" name="submit" value='<?php echo $lang['Submit']; ?>' />
+                    </div>
+                </form>
+            </div>
+        </div>
+
+
+        <div class="col-sm-7">
+            <?php echo $lang["IndexContent"]; ?>
+            <p>
+                <a class="btn btn-default res-btn" role="button" href="validity.php"><?php echo $lang['LinkValidity']; ?> &nbsp;<i class="icon ion-chevron-right"></i></a>
+            </p>
+            <?php echo $lang["IndexAddContent"]; ?>
+        </div>
+    </div>
+    <footer class="footer text-center">
+        <p><?php echo $lang['Footer']; ?></p>
+    </footer>
+
+</div>
+<!-- /container -->
+
+<!-- Help Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel"><?php echo $lang['HelpTitle']; ?></h4>
+            </div>
+            <div class="modal-body">
+                <?php echo $lang['HelpText']; ?>
+                <img src="includes/images/sample.png" alt="sample voucher">
+                <?php echo $lang['HelpText1']; ?>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $lang['Close']; ?></button>
+            </div>
+        </div>
+    </div>
 </div>
 
-<div id="content">
-   <div class="voucher">
-      <div class="voucher_content">
-         <?php
-         if ($err == 1) {
-            echo "<img id='errpic' src='images/icons/error.png' alt='ERROR' />&nbsp;
-                  <span class='error_msg'>".$lang['InvalidVoucher']."</span><br /><br />";
-         }
-         if ($err == 2) {
-            echo "<img id='errpic' src='images/icons/error.png' alt='ERROR' />&nbsp;
-                  <span class='error_msg'>".$lang['ActivatedVoucher']."</span><br /><br />";
-         }
-         if ($err == 3) {
-            echo "<img id='errpic' src='images/icons/error.png' alt='ERROR' />&nbsp;
-                  <span class='error_msg'>".$lang['ExpiredVoucher']."</span><br /><br />";
-         }
-         if ($err == 4) {
-            echo "<img id='errpic' src='images/icons/error.png' alt='ERROR' />&nbsp;
-                  <span class='error_msg'>".$lang['AcceptAgreement']."</span><br /><br />";
-         }
-         if ($err == 5) {
-            echo "<img id='errpic' src='images/icons/error.png' alt='ERROR' />&nbsp;
-                  <span class='error_msg'>".$lang['MacError']."</span><br /><br />";
-         }
-         if ($err == 10) {
-            echo "<img id='errpic' src='images/icons/error.png' alt='ERROR' />&nbsp;
-                  <span class='error_msg'>".$lang['NotActivatedVoucher']."</span><br /><br />";
-         }
-         if ($err == 11) {
-            echo "<span class='error_msg' style='color: green;'>".$lang['ActivationCompleted']."</span>
-                  &nbsp;<img id='errpic' src='images/icons/tick.png' alt='ready' /><br /><br />";
-         }
-         ?>
+<script src="includes/js/jquery-1.11.3.min.js"></script>
+<script src="includes/js/bootstrap.min.js"></script>
 
-         <form name="Formular" id="form_voucher" action="login.php<?php echo '?lang='.$language.'&add='.$add.'&mobil='.$mobil.'&ssl='.$ssl.'&site=normal'; ?>" method="post" onsubmit="return chkFormular()">
-            <span class="help"><a href="help_<?php echo $language; ?>.html" target="_blank" onclick="return popup(this.href);"><?php echo $lang['Help']; ?></a></span>
-            <label><?php echo $lang['LableVoucherCode']; ?></label><br/>
-               <input tabindex="1" type="text" class="input_txt" name="IX1"  maxlength="5" value="" onchange="javascript:checkName(this);" onkeyup="AutomatischesWeiterspringen(this, 'IX2');" /> - 
-               <input tabindex="2" type="text" class="input_txt" name="IX2"  maxlength="5" value="" onchange="javascript:checkName(this);" onkeyup="AutomatischesWeiterspringen(this, 'IX3');" /> - 
-               <input tabindex="3" type="text" class="input_txt" name="IX3"  maxlength="5" value="" onchange="javascript:checkName(this);" onkeyup="AutomatischesWeiterspringen(this, 'IX4');" /> - 
-               <input tabindex="4" type="text" class="input_txt" name="IX4"  maxlength="5" value="" onchange="javascript:checkName(this);" onkeyup="AutomatischesWeiterspringen(this, 'policy');" /><br/><br/>
-               <input type="checkbox" value="accept" name="policy"/> <small><?php echo $lang['AcceptPolicy']; ?></small><br/><br/>
-                    <input class="submit" type="submit" name="submit" value='<?php echo $lang["Submit"]; ?>' />
-         </form>
+<!-- Input mask with placeholder -->
+<!--<script src="includes/js/jquery.maskedinput.min.js"></script>-->
 
-      </div>
-   </div>
-   <div class="inner_content">
-      <?php echo $lang["IndexContent"]; ?>
-      <ul><li><a href="validity.php<?php echo '?lang='.$language.'&add='.$add.'&mobil='.$mobil.'&ssl='.$ssl ?>"><?php echo $lang['LinkValidity']; ?></a></li></ul>
-      <br/>
-      <?php echo $lang["IndexAddContent"]; ?>
-   </div>
-</div>
-</div>
+<!-- Input mask without placeholder -->
+<script src="includes/js/jquery.mask.min.js"></script>
 
-<div id="footer"><p><?php echo $lang['Footer']; ?></p></div>
+<!-- Custom script -->
+<script src="includes/js/app.js"></script>
 </body>
 </html>

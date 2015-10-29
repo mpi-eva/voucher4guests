@@ -16,25 +16,27 @@ http://www.gnu.org/licenses/gpl-2.0.html
 
 
 ### index.php ###
-$lang['PageTitle']='MPI';
-$lang['HeaderTitle']='Login - Guestnetwork';
-$lang['LableVoucherCode']='Voucher-Code :';
-$lang['AcceptPolicy']='I accept the <a href="agree.php?lang=en" target="_blank">User Agreement</a>.';
-$lang['Submit']='Submit';
-$lang['Help']='help';
-$lang['IndexContent']='<h2>Voucher</h2>
+$lang['PageTitle']='Guest Network - Login';
+$lang['HeaderTitle']='Guest Network - Login';
+$lang['LableVoucherCode']='Voucher-Code';
+$lang['Accept']='I accept the';
+$lang['Policy']='User Agreement';
+$lang['Submit']='Connect to network';
+$lang['Help']='Help';
+$lang['IndexContent']='<h3 class="first-headline">Voucher</h3>
           <p>Welcome to the <strong>Guestnetwork</strong> login page. 
              Please enter your twenty-digit voucher. If you have
              no voucher or your voucher has expired, you get a new 
              one at the reception.
           </p>';
-$lang['IndexAddContent']='<h2>additional content</h2>
+$lang['IndexAddContent']='<h3>additional content</h3>
           <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam 
              nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, 
              sed diam voluptua. At vero eos et accusam et justo duo
           </p>';
 $lang['LinkValidity']='show validity of the voucher / logout';
-$lang['Footer']='&copy; 2011, Max Planck Institute for ..., Ort';
+//$lang['Footer']='&copy; 2011, Max Planck Institute for ..., Ort';
+$lang['Footer']='&copy; 2015, Max Planck Institute for Evolutionary Anthropology, Leipzig';
 # ERRORS #
 $lang['InvalidVoucher']='Invalid Voucher!';
 $lang['ActivatedVoucher']='This Voucher was already activated!';
@@ -45,10 +47,18 @@ $lang['NotActivatedVoucher']='This Voucher is not activated!';
 $lang['EnterCompletely']='Please enter the voucher completely!';
 $lang['ActivationCompleted']='Activation finished!';
 
+/* Help modal */
+$lang['HelpTitle']="Help";
+$lang['HelpText']="<p>Enter your twenty-digit voucher here.</p>
+                <p>Please take care of upper- and lowercase characters.</p>";
+$lang['HelpText1']="<p>If you have no voucher or your voucher has expired, you will get a new one at the reception.</p>";
+$lang['Close']="Close";
 
 ### agree.php ###
-$lang['AgreeContent']='
-          <h2>Regulations for Access to and Use of the Guest Network at the Max Planck Institute for ...</h2>
+$lang['PolicyTitle']='Regulations for Access to and Use of the Guest Network at the Max Planck Institute for ...';
+$lang['Download']='Download:';
+$lang['PolicyPDF']='Policy.pdf';
+$lang['PolicyContent']='
           <h3>1. Area of application</h3>
           <ol>
              <li>These regulations apply both to non-Institute computers which have access to the guest network as well as to computer 
@@ -138,24 +148,22 @@ $lang['AgreeContent']='
                  physical injury or impairment of health as a result of a negligent breach of duty on the part of the Institute or a wilful or 
                  negligent breach of duty by a legal representative or vicarious agent of the Institute.</li>
           </ol>';
-$lang['AgreePDF']='Policy.pdf'; 
+
  
 ### validity.php ###
-$lang['ValidityContent']='<h2>expiration date</h2>
-          <h3>Show how long your device is activated.</h3>';
-$lang['ShowValidity']='<p>Your Voucher expires on <strong>%1$s</strong>!</p>
-                       <p><strong>Voucher: </strong>%2$s</p>
-                       <p>This Voucher has been activated at this <br /> mac-adress: <i>%3$s</i></p>';
-$lang['NoValidity']='</p>&rArr; You are currently not registered on a voucher.</p>';
-$lang['LogoutContent']='<h2>log out</h2>
-          <h3>Deactivate your device before the expiration time is reached.</h3>';
-$lang['Logout']='log out';
-$lang['LogoutWorks']='You have successfully logged out.';
-$lang['NoLogout']='You could not be logged out because your device was not activated.';
+$lang['ValidityHeadline']='Expiration Date';
+$lang['ValidityDesc']='Shows you how long your device is activated.';
+$lang['activatedTo']='Your device is activated to %s';
+$lang['VoucherCode']='Voucher-Code:';
+$lang['NoValidity']='You are currently not registered on a voucher.';
+$lang['remainingActivations']='You can activate %s more devices with this Voucher-Code.';
+$lang['noRemainingActivations']='You can activate no more devices with this Voucher-Code.';
+
+$lang['LogoutHeadline']='Log out';
+$lang['LogoutDesc']='Deactivate your device before the expiration time is reached.';
+$lang['Logout']='Log out';
+$lang['LogoutWorks']='Logout successful.';
+$lang['NotActivated']='Your device is not activated.';
 $lang['GoToStart']='go back to login page';
-
-##### mobil #####
-$lang['SwitchView']='switch to normal view';
-
 
 ?>
