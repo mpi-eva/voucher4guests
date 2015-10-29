@@ -39,7 +39,7 @@ CREATE TABLE `vouchers` (
   `validity`        SMALLINT UNSIGNED NOT NULL,
   `canceled`        TINYINT UNSIGNED  NOT NULL,
   `printed`         TINYINT UNSIGNED  NOT NULL,
-  `activ`           TINYINT UNSIGNED  NOT NULL,
+  `active`          TINYINT UNSIGNED  NOT NULL,
   `activation_time` DATETIME          NOT NULL,
   `expiration_time` DATETIME          NOT NULL,
   `use_by_date`     DATETIME          NOT NULL,
@@ -58,16 +58,19 @@ CREATE TABLE `vouchers` (
 DROP TABLE IF EXISTS `mac_addresses`;
 SET character_set_client = utf8;
 CREATE TABLE `mac_addresses` (
-  `mid`         INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `vid`         INT UNSIGNED NOT NULL,
-  `mac_address` VARCHAR(12)  NOT NULL,
+  `mid`               INT UNSIGNED      NOT NULL AUTO_INCREMENT,
+  `vid`               INT UNSIGNED      NOT NULL,
+  `mac_address`       VARCHAR(12)       NOT NULL,
+  `active`            TINYINT UNSIGNED  NOT NULL,
+  `activation_time`   DATETIME          NOT NULL,
+  `deactivation_time` DATETIME,
   PRIMARY KEY (`mid`),
   INDEX `fk_mac_addresses_vouchers_idx` (`vid` ASC),
   CONSTRAINT `fk_mac_addresses_vouchers`
   FOREIGN KEY (`vid`)
   REFERENCES `voucher`.`vouchers` (`vid`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT
 );
 
 
