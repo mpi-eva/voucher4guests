@@ -1,0 +1,62 @@
+body {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.navbar {
+    margin-bottom: 20px;
+}
+
+
+/* Custom page footer */
+.footer {
+    margin-top: 30px;
+    padding-top: 12px;
+    color: #777;
+    border-top: 1px solid #e5e5e5;
+}
+
+
+
+/* DataTable Controls */
+td.details-control {
+    background: url('../images/details_open.png') no-repeat center center;
+    cursor: pointer;
+}
+tr.shown td.details-control {
+    background: url('../images/details_close.png') no-repeat center center;
+}
+
+
+table.innerTable tbody tr th, table.innerTable tbody tr td {
+    padding: 4px 8px;
+}
+
+.btn-toggle {
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+
+
+.box {
+    background-color: #f8f8f8;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 0px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px 15px;
+}
+
+.box-header h4 {
+    margin: 0;
+    font-size: 20px;
+}
+
+.box-header {
+    margin-bottom: 20px;
+}
+
+.box-footer {
+    margin-top: 40px;
+    margin-bottom: 30px;
+}
