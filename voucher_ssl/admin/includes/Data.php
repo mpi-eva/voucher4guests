@@ -14,16 +14,14 @@ $result = $db->select("SELECT * FROM vouchers");
 if (!empty($result)) {
     foreach ($result as $entry) {
 
-
-        $result1 = $db->select("SELECT * FROM mac_addresses WHERE vid=".$entry[vid]);
+        $result1 = $db->select("SELECT * FROM mac_addresses WHERE vid=" . $entry['vid']);
         if (!empty($result1)) {
             $macs = array();
             foreach ($result1 as $entry1) {
                 array_push($macs, $entry1);
             }
-            $entry[macs]=$macs;
+            $entry['macs'] = $macs;
         }
-
 
         //print_r($entry);
         array_push($voucher['data'], $entry);

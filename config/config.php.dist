@@ -43,7 +43,19 @@ return array(
     'max_devices' => 3,
 
     /**
+     * Interval to set the 'use by date' from the creation date
+     *
+     * Note: use the mysql datetime units (DAY, WEEK, MONTH, YEAR)
+     */
+    'voucher_lifetime' => '1 YEAR',
+
+    /**
      * Allowed characters for the voucher code
      */
     'allowed_characters' => array('a','b','c','d','e','f','g','h','j','k','m','n','p','q','r','s','t','u','v','w','x','y','z','2','3','4','5','6','7','8','9'),
+
+    /**
+    * Length of the voucher code
+    */
+    'code_length' => 20,
 );

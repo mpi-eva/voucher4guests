@@ -6,6 +6,8 @@ $config = include($_SERVER['DOCUMENT_ROOT'] . '/../config/config.php');
 $db = new Db();
 $voucher['data'] = array();
 $result = $db->select('SELECT * FROM validities WHERE validity_id != "0"');
+
+
 ?>
 <!DOCTYPE html>
 <html lang="de">
@@ -67,7 +69,7 @@ $result = $db->select('SELECT * FROM validities WHERE validity_id != "0"');
         <div class="row">
             <div class="col-sm-4">
                 <div class="box">
-                <form id="create-form">
+                <form id="create-form" method="post" action="pdf/create_pdf.php" target="_blank">
                     <div class="form-group">
                         <label for="number">Anzahl</label>
                         <input type="number" min="1" step="1" class="form-control" id="number" name="number" placeholder="Anzahl">
@@ -116,15 +118,23 @@ $result = $db->select('SELECT * FROM validities WHERE validity_id != "0"');
 
             <div class="col-sm-8">
                 <p>Hier können Sie neue Voucher erzeugen und ausdrucken.</p>
+                <ol>
+                    <li>Anzahl der Voucher angeben</li>
+                    <li>Voucherart auswählen</li>
+                    <li>Gültigkeit Auswählen oder Zeitspanne angeben</li>
+                    <li>Eingabe bestätigen und PDF ausdrucken</li>
+                </ol>
 
                 <p>
-                    PDF sofort speichern oder ausdrucken.<br>
-                    (PDF wird beim nächsten Erstellen von Vouchern überschrieben!)<br>
-                    • randlos drucken!<br>
-                    • min. 160g Papier (weiß)<br>
-
+                    PDF sofort speichern oder ausdrucken. PDF wird nicht auf dem Server gespeichert!
                 </p>
-
+                <p>
+                    Für optimale Ergebnisse:
+                <ul>
+                    <li>PDF randlos drucken</li>
+                    <li>min. 160g Papier (weiß)</li>
+                </ul>
+                </p>
             </div>
         </div>
     </div>
