@@ -58,4 +58,17 @@ return array(
     * Length of the voucher code
     */
     'code_length' => 20,
+
+    /**
+     * Time after the expired vouchers will be removed
+     *
+     * Note: use the mysql datetime units (DAY, WEEK, MONTH, YEAR)
+     * Default: '60 DAY'
+     */
+    'voucher_retention_period' => '60 DAY',
+
+    /**
+    * Length of the voucher code
+    */
+    'logging_activated' => false,
 );
