@@ -60,7 +60,7 @@ if [ -f $installPATH/config/database.config.php ];  then
 	DB_PW=`sed -ne "/'db_password'/s/.*'db_password' => '\(.*\)'.*/\1/p" /$installPATH/config/database.config.php`;
 
 	# backup the firewall script
-	/bin/cp $installPATH/management_scripts/voucher.fw $installPATH/management_scripts/voucher.fw.bac | tee -a $LOG
+	/bin/cp $installPATH/scripts/voucher.fw $installPATH/scripts/voucher.fw.bac | tee -a $LOG
 fi
 
   echo -e  "- Copying directories\n" | tee -a $LOG
@@ -69,7 +69,7 @@ fi
     mkdir $installPATH | tee -a $LOG
   fi
 
-  /bin/cp -r user_interface/ management_interface/ config/ management_scripts/ doc/ $installPATH/ | tee -a $LOG
+  /bin/cp -r user_interface/ management_interface/ config/ scripts/ doc/ $installPATH/ | tee -a $LOG
 
   # copy config.dist files
   /bin/cp $installPATH/config/config.php.dist $installPATH/config/config.php | tee -a $LOG
@@ -116,8 +116,8 @@ www-data ALL=(ALL) NOPASSWD: /sbin/iptables -D GUEST -t nat -m mac --mac-source 
 	echo "
 
 # service maintenance and backup scripts for voucher4guests installation
-0 0    * * *   root    /usr/bin/php5 $installPATH/management_scripts/voucher_control.php >> /var/log/voucher.log
-0 1    * * *   root    /bin/bash $installPATH/management_scripts/db_backup.sh > /dev/null
+0 0    * * *   root    /usr/bin/php5 $installPATH/scripts/voucher_control.php >> /var/log/voucher.log
+0 1    * * *   root    /bin/bash $installPATH/scripts/db_backup.sh > /dev/null
   	" >> /etc/crontab
   fi
 
@@ -158,11 +158,11 @@ echo "/var/log/voucher.log
     MYSQL=`which mysql`
 
     # create user
-    echo "GRANT ALL PRIVILEGES ON voucher4guests.* TO 'v4g_user'@'localhost' IDENTIFIED BY '$DB_PW'; FLUSH PRIVILEGES;" >> $installPATH/management_scripts/voucher_database.sql
+    echo "GRANT ALL PRIVILEGES ON voucher4guests.* TO 'v4g_user'@'localhost' IDENTIFIED BY '$DB_PW'; FLUSH PRIVILEGES;" >> $installPATH/scripts/voucher_database.sql
 
     # create database
     echo -e "\nfor creation of database, the root password of mysql is needed! "
-    $MYSQL -u root -p < $installPATH/management_scripts/voucher_database.sql
+    $MYSQL -u root -p < $installPATH/scripts/voucher_database.sql
 
   ;;
   *) echo -e "\nMySQL setup was canceled!\n"
@@ -174,8 +174,8 @@ esac
     /bin/sed -i "/'db_password'/s/=> '.*'/=> '$DB_PW'/g" $installPATH/config/database.config.php
     /bin/sed -i "/'db_host'/s/=> '.*'/=> 'localhost'/g" $installPATH/config/database.config.php
 
-    #/bin/sed -i "/mysqldump/s/-p.* --opt/-p'$DB_PW' --opt/g" $installPATH/management_scripts/db_backup.sh --
-    #/bin/sed -i '/backupPath=/s|backupPath=".*"|backupPath="'$installPATH'"|g' $installPATH/management_scripts/db_backup.sh --
+    #/bin/sed -i "/mysqldump/s/-p.* --opt/-p'$DB_PW' --opt/g" $installPATH/scripts/db_backup.sh --
+    #/bin/sed -i '/backupPath=/s|backupPath=".*"|backupPath="'$installPATH'"|g' $installPATH/scripts/db_backup.sh --
     #if [ ! -d $installPATH/mysql_backup ];  then
     #  /bin/mkdir $installPATH/mysql_backup
     #fi
@@ -198,20 +198,20 @@ esac
     read mail
 
     #set server name
-    /bin/sed -i "/ServerName/s|ServerName.*|ServerName $fqdn|g" $installPATH/management_scripts/vhosts/voucher4guests.conf
-    /bin/sed -i "/ServerName/s|ServerName.*|ServerName $fqdn|g" $installPATH/management_scripts/vhosts/voucher4guests_ssl.conf
+    /bin/sed -i "/ServerName/s|ServerName.*|ServerName $fqdn|g" $installPATH/scripts/vhosts/voucher4guests.conf
+    /bin/sed -i "/ServerName/s|ServerName.*|ServerName $fqdn|g" $installPATH/scripts/vhosts/voucher4guests_ssl.conf
 
    #set admin email address
-    /bin/sed -i "/ServerAdmin/s/ServerAdmin.*/ServerAdmin $mail/g" $installPATH/management_scripts/vhosts/voucher4guests.conf
-    /bin/sed -i "/ServerAdmin/s/ServerAdmin.*/ServerAdmin $mail/g" $installPATH/management_scripts/vhosts/voucher4guests_ssl.conf
+    /bin/sed -i "/ServerAdmin/s/ServerAdmin.*/ServerAdmin $mail/g" $installPATH/scripts/vhosts/voucher4guests.conf
+    /bin/sed -i "/ServerAdmin/s/ServerAdmin.*/ServerAdmin $mail/g" $installPATH/scripts/vhosts/voucher4guests_ssl.conf
 
     #set document root
-    /bin/sed -i "/DocumentRoot/s|DocumentRoot .*|DocumentRoot $installPATH\/user_interface|g" $installPATH/management_scripts/vhosts/voucher4guests.conf
-    /bin/sed -i "/DocumentRoot/s|DocumentRoot .*|DocumentRoot $installPATH\/management_interface|g" $installPATH/management_scripts/vhosts/voucher4guests_ssl.conf
+    /bin/sed -i "/DocumentRoot/s|DocumentRoot .*|DocumentRoot $installPATH\/user_interface|g" $installPATH/scripts/vhosts/voucher4guests.conf
+    /bin/sed -i "/DocumentRoot/s|DocumentRoot .*|DocumentRoot $installPATH\/management_interface|g" $installPATH/scripts/vhosts/voucher4guests_ssl.conf
 
     #set directory directive
-    /bin/sed -i "/Directory/s|Directory .*user_interface|Directory $installPATH\/user_interface|g" $installPATH/management_scripts/vhosts/voucher4guests.conf
-    /bin/sed -i "/Directory/s|Directory .*management_interface|Directory $installPATH\/management_interface|g" $installPATH/management_scripts/vhosts/voucher4guests_ssl.conf
+    /bin/sed -i "/Directory/s|Directory .*user_interface|Directory $installPATH\/user_interface|g" $installPATH/scripts/vhosts/voucher4guests.conf
+    /bin/sed -i "/Directory/s|Directory .*management_interface|Directory $installPATH\/management_interface|g" $installPATH/scripts/vhosts/voucher4guests_ssl.conf
 
     #set servername for redirect, important!
     /bin/sed -i "/'domain_name'/s/=> '.*'/=> '$fqdn'/g" $installPATH/config/config.php
@@ -227,8 +227,8 @@ esac
     vhost=`/usr/bin/find /etc/apache2/sites-enabled/ -type l -or -type f`
 
     if [ "$vhost" == "" ]; then
-       /bin/cp $installPATH/management_scripts/vhosts/voucher4guests.conf /etc/apache2/sites-available/
-       /bin/cp $installPATH/management_scripts/vhosts/voucher4guests_ssl.conf /etc/apache2/sites-available/
+       /bin/cp $installPATH/scripts/vhosts/voucher4guests.conf /etc/apache2/sites-available/
+       /bin/cp $installPATH/scripts/vhosts/voucher4guests_ssl.conf /etc/apache2/sites-available/
 
        /bin/ln -s /etc/apache2/sites-available/voucher4guests.conf /etc/apache2/sites-enabled/voucher4guests.conf
        /bin/ln -s /etc/apache2/sites-available/voucher4guests_ssl.conf /etc/apache2/sites-enabled/voucher4guests_ssl.conf
@@ -244,8 +244,8 @@ esac
       case "$vhost_ans" in
 
       Yes|yes|Y|y|Ja|ja|J|j|"")
-        /bin/cp $installPATH/management_scripts/vhosts/voucher4guests.conf /etc/apache2/sites-available/
-        /bin/cp $installPATH/management_scripts/vhosts/voucher4guests_ssl.conf /etc/apache2/sites-available/
+        /bin/cp $installPATH/scripts/vhosts/voucher4guests.conf /etc/apache2/sites-available/
+        /bin/cp $installPATH/scripts/vhosts/voucher4guests_ssl.conf /etc/apache2/sites-available/
 
 	/bin/rm /etc/apache2/sites-enabled/*
         /bin/ln -s /etc/apache2/sites-available/voucher4guests.conf /etc/apache2/sites-enabled/voucher4guests.conf

@@ -47,7 +47,7 @@ guestnetwork:
 
 ## setup firewall
 
-* edit management_scripts/voucher.fw and change the networkinterface identifier (eg.: eth0 or 
+* edit scripts/voucher.fw and change the networkinterface identifier (eg.: eth0 or 
   eth1 for interface to guest network/or interface to internet uplink network) 
 
 * uncomment other features like NATing and/or management access over the 
