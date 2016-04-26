@@ -1,6 +1,8 @@
 <?php
 namespace Voucher\Scripts;
 
+use Mysqli;
+
 /**
  * Class Db
  */

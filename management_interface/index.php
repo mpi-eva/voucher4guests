@@ -13,5 +13,5 @@ This software is released under GPLv2 license - see
 http://www.gnu.org/licenses/gpl-2.0.html
 */
 
-header("location:https://".$_SERVER['SERVER_NAME']."/admin/index.php");
-?>
+header("location:https://".$_SERVER['SERVER_NAME']."/admin/create_voucher.php");
+

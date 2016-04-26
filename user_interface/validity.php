@@ -22,6 +22,8 @@ require_once 'includes/VoucherService.php';
 // load config
 $config = include($_SERVER['DOCUMENT_ROOT'] . '/../config/config.php');
 
+$voucherService = new \Voucher\UserInterface\VoucherService();
+
 $languages = new Language();
 $language = $languages->detectLanguage();
 
@@ -95,7 +97,7 @@ require_once('language/'.$language.'.php');
 					<p><?php echo $lang['ValidityDesc']; ?></p>
 
 					<?php
-					$validity = VoucherService::get_validity();
+					$validity = $voucherService->get_validity();
 
 					if ($validity['activated']):
 						?>
@@ -127,7 +129,7 @@ require_once('language/'.$language.'.php');
 
 					<?php
 					if ( isset($_POST["logout"])):
-						$logout = VoucherService::logout();
+						$logout = $voucherService->logout();
 						if($logout){
 							?>
 							<div class="alert alert-success" role="alert">

@@ -9,12 +9,12 @@
     <link rel="icon" type="image/png" href="includes/images/favicon-32x32.png?v=1" sizes="32x32">
     <link rel="icon" type="image/png" href="includes/images/favicon-16x16.png?v=1" sizes="16x16">
 
-    <title>Database View</title>
+    <title>Datenbank</title>
 
     <!-- Bootstrap CSS -->
     <link href="includes/css/bootstrap.min.css" rel="stylesheet">
     <link href="includes/css/ionicons.min.css" rel="stylesheet" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/s/dt/jqc-1.11.3,dt-1.10.10,af-2.1.0,b-1.1.0,b-colvis-1.1.0,r-2.0.0/datatables.min.css"/>
+    <link rel="stylesheet" type="text/css" href="includes/css/datatables.min.css"/>
     <!-- Custom styles -->
     <link href="includes/css/style.css" rel="stylesheet">
     <!-- <link href="includes/css/color.css" rel="stylesheet">-->
@@ -39,7 +39,7 @@
                 <ul class="nav navbar-nav">
                     <li><a href="create_voucher.php">Voucher erzeugen</a></li>
                     <li class="active"><a href="database.php">Datenbank</a></li>
-                    <li><a href="#">Logging</a></li>
+                    <li><a href="../log/index.php">Logging</a></li>
                 </ul>
             </div><!--/.nav-collapse -->
         </div><!--/.container-fluid -->
@@ -48,7 +48,7 @@
     <!-- Begin page content -->
     <div class="container">
         <div class="page-header">
-            <h1>Database View</h1>
+            <h1>Datenbank</h1>
         </div>
         <table id="example" class="display" cellspacing="0" width="100%">
             <thead>
@@ -57,9 +57,9 @@
                 <th>VID</th>
                 <th>Voucher-Code</th>
                 <th>Gültigkeit</th>
-                <th>active</th>
-                <th>Aktivierung</th>
-                <th>Ablaufzeit</th>
+                <th>Status</th>
+                <th>Aktivierungsdatum</th>
+                <th>Ablaufdatum</th>
                 <th>Verfallsdatum</th>
                 <th>#MACs</th>
                 <th></th>
@@ -71,9 +71,9 @@
                 <th>VID</th>
                 <th>Voucher-Code</th>
                 <th>Gültigkeit</th>
-                <th>active</th>
-                <th>Aktivierung</th>
-                <th>Ablaufzeit</th>
+                <th>Status</th>
+                <th>Aktivierungsdatum</th>
+                <th>Ablaufdatum</th>
                 <th>Verfallsdatum</th>
                 <th>#MACs</th>
                 <th></th>
@@ -91,11 +91,9 @@
     </footer>
 
 </div> <!-- /container -->
-<!--<script src="includes/js/jquery-1.11.3.min.js"></script>-->
-<script type="text/javascript" src="https://cdn.datatables.net/s/dt/jqc-1.11.3,dt-1.10.10,af-2.1.0,b-1.1.0,b-colvis-1.1.0,r-2.0.0/datatables.min.js"></script>
+<script src="includes/js/jquery-1.12.2.min.js"></script>
+<script type="text/javascript" src="includes/js/datatables.min.js"></script>
 <script src="includes/js/bootstrap.min.js"></script>
-
-
 
 <!-- Custom script -->
 <script src="includes/js/database.js"></script>

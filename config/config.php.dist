@@ -52,12 +52,22 @@ return array(
     /**
      * Allowed characters for the voucher code
      */
-    'allowed_characters' => array('a','b','c','d','e','f','g','h','j','k','m','n','p','q','r','s','t','u','v','w','x','y','z','2','3','4','5','6','7','8','9'),
+    'voucher_allowed_characters' => array('a','b','c','d','e','f','g','h','j','k','m','n','p','q','r','s','t','u','v','w','x','y','z','2','3','4','5','6','7','8','9'),
 
     /**
     * Length of the voucher code
     */
-    'code_length' => 20,
+    'voucher_code_length' => 20,
+
+    /**
+    * Voucher network name
+    */
+    'voucher_network_name' => 'WLAN SSID',
+
+    /**
+    * Voucher wlan password
+    */
+    'voucher_wlan_password' => 'xxxxxxxxxxxxx',
 
     /**
      * Time after the expired vouchers will be removed
@@ -68,7 +78,7 @@ return array(
     'voucher_retention_period' => '60 DAY',
 
     /**
-    * Length of the voucher code
+    * Logging
     */
     'logging_activated' => false,
 );

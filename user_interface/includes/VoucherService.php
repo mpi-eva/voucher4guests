@@ -1,5 +1,5 @@
 <?php
-namespace Voucher;
+namespace Voucher\UserInterface;
 
 require_once 'Db.php';
 
@@ -161,10 +161,10 @@ class VoucherService
                                 $mac = self::format_mac($mac, ":", false);
 
                                 //delete mac address from iptables ruleset
-                                //exec("sudo /sbin/iptables -D GUEST -t nat -m mac --mac-source $mac -j ACCEPT");
+                                exec("sudo /sbin/iptables -D GUEST -t nat -m mac --mac-source $mac -j ACCEPT");
 
                                 //add mac address to iptables ruleset
-                                //exec("sudo /sbin/iptables -I GUEST 1 -t nat -m mac --mac-source $mac -j ACCEPT");
+                                exec("sudo /sbin/iptables -I GUEST 1 -t nat -m mac --mac-source $mac -j ACCEPT");
 
                                 $message = self::MESSAGE_ACTIVATION_SUCCESSFUL;
                                 
@@ -258,14 +258,14 @@ class VoucherService
                                AND v.canceled != '1' LIMIT 0,1");
 
         if (!empty($result)) {
-
-           // $update = $db->query("UPDATE vouchers SET canceled = '1', expiration_time=NOW() WHERE vid=" . $result[0]['vid']);
-           // $update = $db->query("UPDATE mac_addresses SET active = '0' WHERE vid=" . $result[0]['vid']." AND mac_address='".$mac."'");
+            // $update = $db->query("UPDATE vouchers SET canceled = '1', expiration_time=NOW() WHERE vid=" . $result[0]['vid']);
+            // $update = $db->query("UPDATE mac_addresses SET active = '0' WHERE vid=" . $result[0]['vid']." AND mac_address='".$mac."'");
             $update = $db->query("UPDATE mac_addresses SET active = '0', deactivation_time = NOW() WHERE mid=" . $result[0]['mid']);
 
             if ($update) {
+                $mac_host = self::format_mac($mac, ":", false);
                 // deletes mac address from iptables ruleset
-                //exec("sudo /sbin/iptables -D GUEST -t nat -m mac --mac-source $mac_host -j ACCEPT");
+                exec("sudo /sbin/iptables -D GUEST -t nat -m mac --mac-source $mac_host -j ACCEPT");
 
                 $ret = true;
             } else {
@@ -287,9 +287,9 @@ class VoucherService
     static function read_client_mac()
     {
         $mac = null;
-        //$mac = shell_exec("/usr/sbin/arp -an " . $_SERVER['REMOTE_ADDR']);
-        $mac = shell_exec("/usr/sbin/arp -an 192.168.41.47");
-        preg_match('/..:..:..:..:..:../', $mac, $matches);
+        $mac = shell_exec("/usr/sbin/arp -an " . $_SERVER['REMOTE_ADDR']);
+        preg_match('/([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])/', $mac, $matches);
+
         if (!empty($matches[0])) {
             $mac = $matches[0];
         }
@@ -335,7 +335,7 @@ class VoucherService
         //load config
         $config = $this->getConfig();
 
-        $allowed_characters = implode($config['allowed_characters']);
+        $allowed_characters = implode($config['voucher_allowed_characters']);
         $allowed_characters = preg_quote($allowed_characters,'/');
 
         //deletes special characters from mac address

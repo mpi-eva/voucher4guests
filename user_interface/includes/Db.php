@@ -1,5 +1,7 @@
 <?php
-namespace Voucher;
+namespace Voucher\UserInterface;
+
+use Mysqli;
 
 /**
  * Class Db

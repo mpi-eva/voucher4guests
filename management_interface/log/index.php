@@ -66,7 +66,7 @@ http://www.gnu.org/licenses/gpl-2.0.html
            <p>&nbsp;</p>
            <p>&nbsp;</p>
            <p>&nbsp;</p>
-           <p class="small">&copy; 2011, voucher4guests Project</p>
+           <p class="small">&copy; 2016, voucher4guests Project</p>
         </div>
      </div>
     

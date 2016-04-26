@@ -40,12 +40,15 @@ $lang['Footer']='&copy; 2015, Max Planck Institute for Evolutionary Anthropology
 # ERRORS #
 $lang['InvalidVoucher']='Invalid Voucher!';
 $lang['ActivatedVoucher']='This Voucher was already activated!';
+$lang['ActivatedDevice']='Your device is already activated!';
 $lang['ExpiredVoucher']='This Voucher has expired!';
 $lang['AcceptAgreement']='Please accept the User Agreement!';
 $lang['MacError']='ERROR with your mac address!';
 $lang['NotActivatedVoucher']='This Voucher is not activated!';
 $lang['EnterCompletely']='Please enter the voucher completely!';
+$lang['MaxDevicesActivated']='You can activate no more devices with this Voucher-Code.';
 $lang['ActivationCompleted']='Activation finished!';
+
 
 /* Help modal */
 $lang['HelpTitle']="Help";

@@ -1,5 +1,7 @@
 <?php
-namespace Voucher\Admin;
+namespace Voucher\ManagementInterface;
+
+use Mysqli;
 
 /**
  * Class Db

@@ -7,7 +7,7 @@ function format ( d ) {
         s +='<table cellpadding="0" cellspacing="0" border="0" class="innerTable">';
         s +=
             '<tr>'+
-            '<th>MAC</th>'+
+            '<th>MAC-Adresse</th>'+
             '<th>aktiv</th>'+
             '<th>Aktivierung</th>'+
             '<th>Deaktivierung</th>'+
@@ -59,7 +59,7 @@ $(document).ready(function() {
             { "data": "vid" },
             { "data": "voucher_code" },
             { "data": "validity" },
-            { "data": "active" },
+            { "data": "status" },
             { "data": "activation_time" },
             { "data": "expiration_time" },
             { "data": "use_by_date" },

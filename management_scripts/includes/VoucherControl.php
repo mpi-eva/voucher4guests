@@ -3,42 +3,67 @@ namespace Voucher\Scripts;
 
 require_once 'Db.php';
 
+/**
+ * Class VoucherControl
+ * @package Voucher\Scripts
+ */
 class VoucherControl
 {
+    /**
+     * @var
+     */
     private $config;
+    /**
+     * @var
+     */
     private $dbConfig;
+    /**
+     * @var
+     */
     private $logDbConfig;
 
 
+    /**
+     * @return array An Array with config values
+     */
     public function getConfig()
     {
         if (!isset($this->config)) {
-            $this->config = include ($_SERVER['DOCUMENT_ROOT'].'/../config/config.php');
+            $this->config = include ('../config/config.php');
         }
 
         return $this->config;
     }
 
+    /**
+     * @return array An Array with the database connection settings
+     */
     public function getDbConfig()
     {
         if (!isset($this->dbConfig)) {
-            $this->dbConfig = include ($_SERVER['DOCUMENT_ROOT'].'/../config/database.config.php');
+            $this->dbConfig = include ('../config/database.config.php');
         }
 
         return $this->dbConfig;
     }
 
+    /**
+     * @return array An Array with the log database connection settings
+     */
     public function getLogDbConfig()
     {
         if (!isset($this->logDbConfig)) {
-            $this->logDbConfig = include ($_SERVER['DOCUMENT_ROOT'].'/../config/database.config.php');
+            $this->logDbConfig = include ('../config/database.config.php');
         }
 
-        return $this->LogDbConfig;
+        return $this->logDbConfig;
     }
 
-
-    # mark vouchers which where activated (by user) and now outdated in database as canceled
+    /**
+     * Mark expired vouchers as 'canceled' and remove the firewall rule
+     *
+     * @return void
+     */
     public function deactivateVoucher()
     {
         $db = new Db($this->getDbConfig());
@@ -56,7 +81,7 @@ class VoucherControl
 
                 //recreate normal mac address schema
                 $mac = self::format_mac($mac_row['mac_address'], ":", false);
-                // exec("sudo /sbin/iptables -D GUEST -t nat -m mac --mac-source $mac -j ACCEPT");
+                exec("sudo /sbin/iptables -D GUEST -t nat -m mac --mac-source $mac -j ACCEPT");
 
                 print "Eintrag aus Firewall gelöscht: VID=".$row['vid'].", MAC=".$mac."\n";
                 #mark this voucher as canceled in database
@@ -67,6 +92,10 @@ class VoucherControl
     }
 
     # mark vouchers which where never activated (by user) and which over "use_by_date" as canceled
+    /**
+     * Mark unused voucher on the expiry date as 'canceled'
+     * @return void
+     */
     public function deactivateUnusedVoucher()
     {
         $db = new Db($this->getDbConfig());
@@ -78,18 +107,26 @@ class VoucherControl
         }
     }
 
-    # activate voucher when they reach their activation date
+    /**
+     * Activate voucher which start at an defined date
+     *
+     * @return void
+     */
     public function activateVoucher()
     {
         $db = new Db($this->getDbConfig());
         $result = $db->select("SELECT vid FROM vouchers WHERE activation_time<=DATE_ADD(NOW(),INTERVAL 1 DAY) AND active='0' AND canceled='0'");
         foreach($result as $row) {
-            $update = $db->query("UPDATE vouchers SET activ = '1' WHERE vid='" . $row['vid']. "'");
+            $update = $db->query("UPDATE vouchers SET active = '1' WHERE vid='" . $row['vid']. "'");
             print "voucher activated: VID=".$row['vid']."\n";
         }
     }
 
-    # delete vouchers which are canceled and older than 60 days
+    /**
+     * Remove voucher form the database which are 'canceled' and older than a defined period of time.
+     *
+     * @return void
+     */
     public function removeVoucher()
     {
 
@@ -109,7 +146,11 @@ class VoucherControl
         }
     }
 
-    # checking log entries and delete them if there are older than 60 days
+    /**
+     * Check log entries and delete them if there are older than 60 days
+     *
+     * @return void
+     */
     public function removeLogEntries()
     {
         print "check Syslog tables and delete entry older than 60 days\n";
@@ -120,6 +161,23 @@ class VoucherControl
             #delete entries
             $delete = $db->query("DELETE FROM SystemEvents WHERE ID='".$row['ID']."'");
         }
+    }
+
+    /**
+     * Reload the firewall rules for active mac addresses
+     *
+     * @return void
+     */
+    public function reloadVoucher()
+    {
+        $db = new Db($this->getDbConfig());
+
+        $result = $db->query("SELECT m.mac_address FROM vouchers as v, mac_addresses as m WHERE v.vid=m.vid and v.active='1' and v.canceled='0' and m.active = '1';");
+        foreach($result as $row) {
+            $mac = self::format_mac($row['mac_address'], ":", false);
+            exec("sudo /sbin/iptables -I GUEST 1 -t nat -m mac --mac-source $mac -j ACCEPT");
+        }
+
     }
 
     /**

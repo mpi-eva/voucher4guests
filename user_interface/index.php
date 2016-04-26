@@ -28,12 +28,12 @@ if(isset($_GET['origin_url'])) {
 }
 
 if (isset($_POST['voucher_code']) AND !empty($_POST['voucher_code'])) {
-    $voucherService = new \Voucher\VoucherService();
+    $voucherService = new \Voucher\UserInterface\VoucherService();
     $voucher_code = $voucherService->format_voucher_code($_POST['voucher_code']);
     $message = $voucherService->login($voucher_code);
 
     // redirect, if origin url is given
-    if ($message = \Voucher\VoucherService::MESSAGE_ACTIVATION_SUCCESSFUL
+    if ($message == \Voucher\UserInterface\VoucherService::MESSAGE_ACTIVATION_SUCCESSFUL
         AND !empty($_SESSION['origin_url'])
         AND $config['redirect_user']){
         header("location:http://".$_SESSION['origin_url']);
@@ -117,32 +117,32 @@ require_once('language/'.$language.'.php');
                     // Error Messages
                     if (!empty($message)){
                         switch($message){
-                            case(VoucherService::MESSAGE_ACTIVATION_SUCCESSFUL):
+                            case(\Voucher\UserInterface\VoucherService::MESSAGE_ACTIVATION_SUCCESSFUL):
                                 $alert_class = "alert-success";
                                 $alert_icon = "ion-checkmark";
                                 $message_text = $lang['ActivationCompleted'];
                                 break;
-                            case(VoucherService::MESSAGE_INVALID_VOUCHER):
+                            case(\Voucher\UserInterface\VoucherService::MESSAGE_INVALID_VOUCHER):
                                 $alert_class = "alert-warning";
                                 $alert_icon = "ion-alert";
                                 $message_text = $lang['InvalidVoucher'];
                                 break;
-                            case(VoucherService::MESSAGE_DEVICE_ALREADY_ACTIVATED):
+                            case(\Voucher\UserInterface\VoucherService::MESSAGE_DEVICE_ALREADY_ACTIVATED):
                                 $alert_class = "alert-success";
                                 $alert_icon = "ion-checkmark";
-                                $message_text = $lang['ActivatedVoucher'];
+                                $message_text = $lang['ActivatedDevice'];
                                 break;
-                            case(VoucherService::MESSAGE_EXPIRED_VOUCHER):
+                            case(\Voucher\UserInterface\VoucherService::MESSAGE_EXPIRED_VOUCHER):
                                 $alert_class = "alert-warning";
                                 $alert_icon = "ion-alert";
                                 $message_text = $lang['ExpiredVoucher'];
                                 break;
-                            case(VoucherService::MESSAGE_NOT_ACTIVATED_VOUCHER):
+                            case(\Voucher\UserInterface\VoucherService::MESSAGE_NOT_ACTIVATED_VOUCHER):
                                 $alert_class = "alert-warning";
                                 $alert_icon = "ion-alert";
                                 $message_text = $lang['NotActivatedVoucher'];
                                 break;
-                            case(VoucherService::MESSAGE_MAX_DEVICES_ACTIVATED):
+                            case(\Voucher\UserInterface\VoucherService::MESSAGE_MAX_DEVICES_ACTIVATED):
                                 $alert_class = "alert-warning";
                                 $alert_icon = "ion-alert";
                                 $message_text = $lang['MaxDevicesActivated'];

@@ -12,9 +12,9 @@
 -- http://www.gnu.org/licenses/gpl-2.0.html
 
 
-DROP DATABASE IF EXISTS `voucher`;
-CREATE DATABASE IF NOT EXISTS `voucher`;
-USE `voucher`;
+DROP DATABASE IF EXISTS `voucher4guests`;
+CREATE DATABASE IF NOT EXISTS `voucher4guests`;
+USE `voucher4guests`;
 
 
 -- Table structure for table `validity`
@@ -47,7 +47,7 @@ CREATE TABLE `vouchers` (
   INDEX `fk_vouchers_validities_idx` (`validity` ASC),
   CONSTRAINT `fk_vouchers_validities`
   FOREIGN KEY (`validity`)
-  REFERENCES `voucher`.`validities` (`validity_id`)
+  REFERENCES `voucher4guests`.`validities` (`validity_id`)
     ON DELETE RESTRICT
     ON UPDATE RESTRICT
 );
@@ -68,7 +68,7 @@ CREATE TABLE `mac_addresses` (
   INDEX `fk_mac_addresses_vouchers_idx` (`vid` ASC),
   CONSTRAINT `fk_mac_addresses_vouchers`
   FOREIGN KEY (`vid`)
-  REFERENCES `voucher`.`vouchers` (`vid`)
+  REFERENCES `voucher4guests`.`vouchers` (`vid`)
     ON DELETE RESTRICT
     ON UPDATE RESTRICT
 );

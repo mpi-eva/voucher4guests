@@ -2,8 +2,7 @@
 ###############################################################################
 #NAME voucher.fw  is part of the voucher4guests Project
 #SYNOPSIS initialize local firewall 
-#DESCRIPTION initialize local firewall and insert active mac addresses from
-#voucher database
+#DESCRIPTION initialize local firewall
 #AUTHOR Lars Uhlemann, lars_uhlemann at eva dot mpg dot de
 #AUTHOR Alexander Mueller, alexander_mueller at eva dot mpg dot de
 #VERSION 0.4
@@ -15,10 +14,12 @@
 #http://www.gnu.org/licenses/gpl-2.0.html
 ##############################################################################
 
+cd "$(dirname "$0")"
 
 echo "1" > /proc/sys/net/ipv4/ip_forward # initialize forwarding 
 
 IPTABLES="/sbin/iptables"
+PHP="/usr/bin/php"
 
 # guest interface with ip definition 
 IFACE2GUEST="eth0"
@@ -110,7 +111,7 @@ $IPTABLES -A FORWARD -i $IFACE2GUEST -o $IFACE2INTERNET -j ACCEPT
 #allow new output connections 
 $IPTABLES -A OUTPUT -m state --state NEW -j ACCEPT
 
-# loging only traffic to outside
+# logging only traffic to outside
 $IPTABLES -N GUEST_LOG -t nat
 $IPTABLES -I PREROUTING 1 -t nat -i $IFACE2GUEST -m state --state NEW -j GUEST_LOG
 $IPTABLES -A GUEST_LOG -t nat -d $IP4GUEST_IF -j RETURN
@@ -121,13 +122,11 @@ $IPTABLES -A GUEST_LOG -t nat -j LOG --log-prefix "voucher2log "
 #$IPTABLES -I GUEST 1 -t nat -m mac --mac-source xx:xx:xx:xx:xx:xx  -j ACCEPT
 #
 
+
+
 # read active mac addresses from db an add them to fw rule table
-result=`mysql --user="db_user" --password="mpi" -D voucher --execute="SELECT mac FROM vouchers WHERE activ='1' && canceled='0' && mac != ''" | tail -n +2 | sed 's/\([0-9a-fA-F]\{2\}\)/\1:/g; s/:$//'`
+$PHP voucher_reload.php
 
-array=($result)
 
-for ((i=0; i<${#array[*]}; i++)) do
-	$IPTABLES -I GUEST 1 -t nat -m mac --mac-source ${array[$i]} -j ACCEPT 
-done
 
 

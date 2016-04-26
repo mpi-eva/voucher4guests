@@ -27,7 +27,7 @@ echo "THIS SCRIPT REQUIRES ROOT PRIVILEGES"
 exit 0
 fi
 
-if [  ! -d $installPATH/voucher ] && [ ! -d $installPATH/voucher_ssl ]; then
+if [  ! -d $installPATH/user_interface ] && [ ! -d $installPATH/management_interface ]; then
 	echo -e "Please run install.sh before install logging\n"
 	exit 0
 fi
@@ -50,7 +50,7 @@ fi
 
 echo -e "\n- Install LogAnalyzer\n" | tee -a $LOG	
 
-if [ -f $installPATH/voucher_ssl/log/login.php ]; then
+if [ -f $installPATH/management_interface/log/login.php ]; then
 	echo -n "Found a Loganalyzer installation, continue (yes/no):? "
 	read log_ans
 	case "$log_ans" in
@@ -69,7 +69,7 @@ if [ -e $LOGANALYZER_FILE ]; then
 	/bin/tar xfz $LOGANALYZER_FILE | tee -a $LOG
 	echo  -e "found LogAnalyzer Install Package unpacking and installing now: $LOGANALYZER_FILE \n"
 	LOGANALYZER_FILE=`echo "$LOGANALYZER_FILE" | sed -e s/.tar.gz//`
-	/bin/cp -r $LOGANALYZER_FILE/src/* $installPATH/voucher_ssl/log/ | tee -a $LOG
+	/bin/cp -r $LOGANALYZER_FILE/src/* $installPATH/management_interface/log/ | tee -a $LOG
 else
 	echo -e "\nPlease download newest stable release of Adiscon LogAnalyzer\nfrom here http://loganalyzer.adiscon.com/downloads"
 	echo -e "and save it here, where this installscript is located"
@@ -88,11 +88,14 @@ fi
 	#extract database password 
 	LOGDBPASSWORD=`/usr/bin/awk -F, '/kern.warning/ {print $NF}' /etc/rsyslog.d/mysql.conf`
 	#set database password to LogAnalyzer config.php
-	/bin/sed -i "/\['DBPassword'\]/s/\['DBPassword'\] = '.*'/\['DBPassword'\] = '$LOGDBPASSWORD'/" $installPATH/voucher_ssl/log/config.php | tee -a $LOG 
-	#set logging flag in maintenance script check_voucher.php
-	/bin/sed -i "s/logging = \"0\"/logging = \"1\"/" $installPATH/scripts/check_voucher.php | tee -a $LOG
+	/bin/sed -i "/\['DBPassword'\]/s/\['DBPassword'\] = '.*'/\['DBPassword'\] = '$LOGDBPASSWORD'/" $installPATH/management_interface/log/config.php | tee -a $LOG 
+	#enable logging for voucher_control.php
+	/bin/sed -i "/'logging_activated'/s/=> false/=> true/g" $installPATH/config/config.php | tee -a $LOG
+
+	# copy log_database.config.dist file for database connection
+	/bin/cp $installPATH/config/log_database.config.php.dist $installPATH/config/log_database.config.php | tee -a $LOG
 	#set logging database parameter file (for maintenance script check_voucher.php)
-	/bin/sed -i "/$conf\['log_db_password'\]/s/= '.*'/= '$LOGDBPASSWORD'/g" $installPATH/config/log_database.php | tee -a $LOG
+	/bin/sed -i "/$conf\['log_db_password'\]/s/= '.*'/= '$LOGDBPASSWORD'/g" $installPATH/config/log_database.config.php | tee -a $LOG
 	#restart rsyslog to start logging
 	/usr/bin/service rsyslog restart
 

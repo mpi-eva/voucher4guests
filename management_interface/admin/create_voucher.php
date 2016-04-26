@@ -3,7 +3,8 @@
 require_once 'includes/Db.php';
 //load config
 $config = include($_SERVER['DOCUMENT_ROOT'] . '/../config/config.php');
-$db = new Db();
+$dbConfig = include($_SERVER['DOCUMENT_ROOT'] . '/../config/database.config.php');
+$db = new \Voucher\ManagementInterface\Db($dbConfig);
 $voucher['data'] = array();
 $result = $db->select('SELECT * FROM validities WHERE validity_id != "0"');
 
@@ -53,7 +54,7 @@ $result = $db->select('SELECT * FROM validities WHERE validity_id != "0"');
                 <ul class="nav navbar-nav">
                     <li class="active"><a href="create_voucher.php">Voucher erzeugen</a></li>
                     <li><a href="database.php">Datenbank</a></li>
-                    <li><a href="#">Logging</a></li>
+                    <li><a href="../log/index.php">Logging</a></li>
                 </ul>
             </div>
             <!--/.nav-collapse -->
@@ -107,7 +108,7 @@ $result = $db->select('SELECT * FROM validities WHERE validity_id != "0"');
                             <div class="input-group-addon">
                                 <i class="icon ion-calendar"></i>
                             </div>
-                            <input type="text" class="form-control pull-right" id="daterange" name="daterange" disabled>
+                            <input type="text" class="form-control pull-right" id="daterange" name="daterange">
                         </div>
                     </div>
 
@@ -146,7 +147,7 @@ $result = $db->select('SELECT * FROM validities WHERE validity_id != "0"');
 
 </div>
 <!-- /container -->
-<script src="includes/js/jquery-1.11.3.min.js"></script>
+<script src="includes/js/jquery-1.12.2.min.js"></script>
 <script src="includes/js/bootstrap.min.js"></script>
 <script src="includes/js/daterangepicker/moment.min.js"></script>
 <script src="includes/js/daterangepicker/daterangepicker.js"></script>

@@ -38,14 +38,17 @@ $lang['IndexAddContent']='<h3>zusätzlicher Inhalt</h3>
 $lang['LinkValidity']='Laufzeit des Vouchers anzeigen / Ausloggen';
 $lang['Footer']='&copy; 2015, Max-Planck-Institut für ... , Ort';
 # ERRORS #
-$lang['InvalidVoucher']='Ungültiger Voucher!';
+ $lang['InvalidVoucher']='Ungültiger Voucher!';
 $lang['ActivatedVoucher']='Ihr Voucher wurde bereits aktiviert!';
-$lang['ExpiredVoucher']='Ihr Voucher ist abgelaufen!';
+ $lang['ActivatedDevice']='Ihr Gerät ist bereits freigeschalten.';
+ $lang['ExpiredVoucher']='Ihr Voucher ist abgelaufen!';
 $lang['AcceptAgreement']='Bitte akzeptieren Sie die Nutzerordnung!';
 $lang['MacError']='FEHLER mit ihrer MAC-Adresse!';
-$lang['NotActivatedVoucher']='Dieser Voucher ist nicht aktiviert!';
+ $lang['NotActivatedVoucher']='Dieser Voucher ist nicht aktiviert!';
 $lang['EnterCompletely']='Bitte Voucher-Code komplett eingeben!';
-$lang['ActivationCompleted']='Freischaltung abgeschlossen!';
+ $lang['MaxDevicesActivated']='Es können keine weiteren Geräte mit diesem Voucher-Code freigeschalten werden.';
+ $lang['ActivationCompleted']='Freischaltung abgeschlossen!';
+
 
 /* Help modal */
 $lang['HelpTitle']="Hilfe";
@@ -165,8 +168,8 @@ $lang['ValidityDesc']='Anzeigen bis wann Ihr Gerät aktiviert ist.';
 $lang['activatedTo']='Ihr Gerät ist bis zum %s freigeschaltet.';
 $lang['VoucherCode']='Voucher-Code:';
 $lang['NoValidity']='Ihr Gerät ist zurzeit nicht mit einem Voucher freigeschalten.';
-$lang['remainingActivations']='Sie können noch %s weitere Geräte mit diesem Voucher-Code freischalten.';
-$lang['noRemainingActivations']='Sie können keine weitere Geräte mit diesem Voucher-Code freischalten.';
+$lang['remainingActivations']='Es können noch %s weitere Geräte mit diesem Voucher-Code freigeschalten werden.';
+$lang['noRemainingActivations']='Es können keine weiteren Geräte mit diesem Voucher-Code freigeschalten werden.';
 
 $lang['LogoutHeadline']='Ausloggen';
 $lang['LogoutDesc']='Ihr Gerät deaktivieren bevor der Ablaufzeitpunkt ihres Vouchers erreicht ist.';

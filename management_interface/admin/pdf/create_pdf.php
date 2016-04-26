@@ -5,10 +5,6 @@ require_once 'fpdf.php';
 
 
 if ($_POST) {
-   /* echo '<pre>';
-    echo htmlspecialchars(print_r($_POST, true));
-    echo '</pre>';*/
-
 
     if (isset($_GET['quantity'])&& isset($_GET['validity'])) {
         $quantity = $_GET['quantity'];
@@ -34,6 +30,9 @@ if ($_POST) {
  */
 function createPDF()
 {
+    //load config
+    $config = include($_SERVER['DOCUMENT_ROOT'] . '/../config/config.php');
+
     $pdf = new FPDF('P', 'mm', 'A4');
     $pdf->SetCreator('voucher4guests');
     $pdf->SetAuthor('voucher4guests');
@@ -45,8 +44,8 @@ function createPDF()
     $imgy = 0;
     $page = 0;
 
-
-    $db = new Db();
+    $dbConfig = include($_SERVER['DOCUMENT_ROOT'] . '/../config/database.config.php');
+    $db = new \Voucher\ManagementInterface\Db($dbConfig);
 
     $result = $db->select("SELECT vid, voucher_code, validities.validity, validities.description, activation_time, expiration_time, use_by_date FROM vouchers LEFT JOIN validities ON vouchers.validity = validities.validity_id WHERE printed = '0' ORDER BY vouchers.vid");
 
@@ -91,10 +90,10 @@ function createPDF()
             $pdf->Cell(0, 10, $description);
 # SSID >>>>>>>>>>>>>>		 
             $pdf->SetXY($imgx + 35.4, $imgy + 52);
-            $pdf->Cell(0, 10, 'WLAN SSID');
+            $pdf->Cell(0, 10, $config['voucher_network_name']);
 # passphrase >>>>>>>>		 
             $pdf->SetXY($imgx + 37.2, $imgy + 57);
-            $pdf->Cell(0, 10, 'xxxxxxxxxxxxx');
+            $pdf->Cell(0, 10, $config['voucher_wlan_password']);
 
             $pdf->SetFontSize(8);
             $pdf->SetXY($imgx + 12.2, $imgy + 63.6);
@@ -145,11 +144,12 @@ function createVoucher($quantity, $validity, $act_time = '0000-00-00 00:00:00', 
     //load config
     $config = include($_SERVER['DOCUMENT_ROOT'] . '/../config/config.php');
 
-    $db = new Db();
+    $dbConfig = include($_SERVER['DOCUMENT_ROOT'] . '/../config/database.config.php');
+    $db = new \Voucher\ManagementInterface\Db($dbConfig);
 
     for ($i = 1; $i <= $quantity; $i++) {
 
-        $voucher_code = generateCode($config['code_length'], $config['allowed_characters']);
+        $voucher_code = generateCode($config['voucher_code_length'], $config['voucher_allowed_characters']);
 
         //test if voucher code is already in use
 

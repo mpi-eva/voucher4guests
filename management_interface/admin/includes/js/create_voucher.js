@@ -7,33 +7,20 @@ $('input[name="daterange"]').daterangepicker({
 
 
 // toogle button
-$('.btn-group .btn').on('change','click',function(){
+$('.btn-group .btn').on('change',function(){
 
-    var input1 = $("select[name='validity']");
-    var input2 = $("input[name='daterange']");
-
-    var disabled_txt_color = '#888';
-    var enabled_txt_color = '#333';
-
+    var input1 = $("select[name='validity']").parent();
+    var input2 = $("input[name='daterange']").parent().parent();
 
     if($(this).text()==$("#option1").parent().text()){
-
-        input1.prop('disabled', false);
-        input1.parent().find("label").css("color", enabled_txt_color);
-
-        input2.prop('disabled', true);
-        input2.parent().parent().find("label").css("color", disabled_txt_color);
-
+        input1.show();
+        input2.hide();
     }
     if($(this).text()==$("#option2").parent().text()){
-
-        input2.prop('disabled', false);
-        input2.parent().parent().find("label").css("color", enabled_txt_color);
-
-        input1.prop('disabled', true);
-        input1.parent().find("label").css("color", disabled_txt_color);
+        input1.hide();
+        input2.show();
     }
-})
+});
 
 // enable / disable submit button
 function checkInput() {
@@ -88,7 +75,12 @@ $('.btn-group .btn').on('change',function(){
     checkInput();
 });
 $( document ).ready(function() {
-    alert('test');
+
+    var input1 = $("select[name='validity']").parent();
+    var input2 = $("input[name='daterange']").parent().parent();
+    input1.show();
+    input2.hide();
+
     checkInput();
 });
 
