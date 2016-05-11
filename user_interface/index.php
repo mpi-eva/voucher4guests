@@ -1,19 +1,5 @@
 <?php 
 
-/*
-NAME index.php is part of the voucher4guests Project
-SYNOPSIS root user php of project 
-DESCRIPTION root user php of project
-AUTHORS Alexander Mueller, alexander_mueller at eva dot mpt dot de
-VERSION 0.4b
-COPYRIGHT AND LICENSE 
-
-(c) Alexander Mueller Lars Uhlemann
-
-This software is released under GPLv2 license - see 
-http://www.gnu.org/licenses/gpl-2.0.html
-*/
-
 session_start();
 require_once 'includes/redirect.php';
 require_once 'includes/VoucherService.php';

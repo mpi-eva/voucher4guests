@@ -1,20 +1,5 @@
 <?php
 
-/*
-NAME validity.php is part of the voucher4guests Project
-SYNOPSIS creates validity check site 
-DESCRIPTION creates validity check site with validity check subroutine
-validity_function.php and logout_function.php subroutine
-AUTHORS Alexander Mueller, alexander_mueller at eva dot mpt dot de
-VERSION 0.4
-COPYRIGHT AND LICENSE 
-
-(c) Alexander Mueller Lars Uhlemann
-
-This software is released under GPLv2 license - see 
-http://www.gnu.org/licenses/gpl-2.0.html
-*/
-
 session_start();
 require_once 'language/Language.php';
 require_once 'includes/VoucherService.php';

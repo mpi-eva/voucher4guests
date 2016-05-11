@@ -1,21 +1,5 @@
 <?php
 
-/*
-NAME de.php is part of the voucher4guests Project
-SYNOPSIS german text file 
-DESCRIPTION german language text file  
-AUTHORS Alexander Mueller, alexander_mueller at eva dot mpt dot de
-VERSION 0.4
-COPYRIGHT AND LICENSE 
-
-(c) Alexander Mueller Lars Uhlemann
-
-This software is released under GPLv2 license - see 
-http://www.gnu.org/licenses/gpl-2.0.html
-*/
-
-
-
 ### index.php ###
 $lang['PageTitle']='Gästenetzwerk - Login';
 $lang['HeaderTitle']='Gästenetzwerk - Login';

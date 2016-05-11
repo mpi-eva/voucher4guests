@@ -1,18 +1,4 @@
 #!/bin/bash
-###############################################################################
-#NAME voucher.fw  is part of the voucher4guests Project
-#SYNOPSIS initialize local firewall 
-#DESCRIPTION initialize local firewall
-#AUTHOR Lars Uhlemann, lars_uhlemann at eva dot mpg dot de
-#AUTHOR Alexander Mueller, alexander_mueller at eva dot mpg dot de
-#VERSION 0.4
-#COPYRIGHT AND LICENSE 
-#
-#(c) Lars Uhlemann Alexander Mueller
-#
-#This software is released under GPLv2 license - see 
-#http://www.gnu.org/licenses/gpl-2.0.html
-##############################################################################
 
 cd "$(dirname "$0")"
 

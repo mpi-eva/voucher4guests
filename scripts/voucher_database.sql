@@ -1,17 +1,3 @@
--- NAME voucher.sql  is part of the voucher4guests Project
--- SYNOPSIS creates voucher database 
--- DESCRIPTION creates voucher database
--- AUTHOR Alexander Mueller, alexander_mueller at eva dot mpg dot de
--- AUTHOR Lars Uhlemann, lars_uhlemann at eva dot mpg dot de
--- VERSION 0.4
--- COPYRIGHT AND LICENSE 
---
--- (c) Alexander Mueller Lars Uhlemann
--- 
--- This software is released under GPLv2 license - see 
--- http://www.gnu.org/licenses/gpl-2.0.html
-
-
 DROP DATABASE IF EXISTS `voucher4guests`;
 CREATE DATABASE IF NOT EXISTS `voucher4guests`;
 USE `voucher4guests`;

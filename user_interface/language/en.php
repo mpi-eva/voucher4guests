@@ -1,20 +1,5 @@
 <?php
 
-/*
-NAME en.php is part of the voucher4guests Project
-SYNOPSIS english text file 
-DESCRIPTION english language text file  
-AUTHORS Alexander Mueller, alexander_mueller at eva dot mpt dot de
-VERSION 0.4
-COPYRIGHT AND LICENSE 
-
-(c) Alexander Mueller Lars Uhlemann
-
-This software is released under GPLv2 license - see 
-http://www.gnu.org/licenses/gpl-2.0.html
-*/
-
-
 ### index.php ###
 $lang['PageTitle']='Guest Network - Login';
 $lang['HeaderTitle']='Guest Network - Login';

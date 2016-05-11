@@ -1,18 +1,4 @@
 #!/bin/bash
-###############################################################################
-#NAME install.sh  is part of the voucher4guests Project
-#SYNOPSIS voucher4guests install script
-#DESCRIPTION automatic install script of voucher4guests project
-#AUTHOR Alexander Mueller, alexander_mueller at eva dot mpg dot de
-#VERSION 0.4a
-#COPYRIGHT AND LICENSE
-#
-#(c) Alexander Mueller Lars Uhlemann
-#
-#This software is released under GPLv2 license - see
-#http://www.gnu.org/licenses/gpl-2.0.html
-##############################################################################
-#
 
 LOG="installlog.txt"
 # installdirectory
