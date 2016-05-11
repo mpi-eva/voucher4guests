@@ -39,7 +39,6 @@
                 <ul class="nav navbar-nav">
                     <li><a href="create_voucher.php">Voucher erzeugen</a></li>
                     <li class="active"><a href="database.php">Datenbank</a></li>
-                    <li><a href="../log/index.php">Logging</a></li>
                 </ul>
             </div><!--/.nav-collapse -->
         </div><!--/.container-fluid -->

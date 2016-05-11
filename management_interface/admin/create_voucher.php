@@ -54,7 +54,6 @@ $result = $db->select('SELECT * FROM validities WHERE validity_id != "0"');
                 <ul class="nav navbar-nav">
                     <li class="active"><a href="create_voucher.php">Voucher erzeugen</a></li>
                     <li><a href="database.php">Datenbank</a></li>
-                    <li><a href="../log/index.php">Logging</a></li>
                 </ul>
             </div>
             <!--/.nav-collapse -->
