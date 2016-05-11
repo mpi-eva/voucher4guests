@@ -25,33 +25,15 @@ function format ( d ) {
 
         s+= '</table>';
     }
-    /*var s ='<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
-        '<tr>'+
-        '<td>Full name:</td>'+
-        '<td>'+d.vid+'</td>'+
-        '</tr>'+
-        '<tr>'+
-        '<td>Extension number:</td>'+
-        '<td>'+d.voucher_code+'</td>'+
-        '</tr>'+
-        '<tr>'+
-        '<td>Extra info:</td>'+
-        '<td>And any further details here (images etc)...</td>'+
-        '</tr>'+
-        '</table>';*/
-
-
     return s;
 }
 
 $(document).ready(function() {
-       var table = $('#example').DataTable( {
-       // "ajax": "../ajax/data/objects.txt",
-       // "ajax": "includes/js/data.json",
-        "ajax": "includes/Data.php",
+    var table = $('#database_table').DataTable( {
+        "ajax": "includes/voucher_data.php",
         "columns": [
             {
-                "className":      'dtails-control',
+               // "className":      'dtails-control',
                 "orderable":      false,
                 "data":           null,
                 "defaultContent": ''
@@ -100,11 +82,18 @@ $(document).ready(function() {
                 "targets": [9],
             }
         ],
-        "order": [[1, 'asc']]
+        "order": [[1, 'asc']],
+        "lengthMenu": [[50, 100, 200, 400, -1], [50, 100, 200, 400, "All"]],
+        "scroller":       true,
+        "deferRender":    true,
+        "scrollY":        400,
+        "paging":         true,
+        "scrollCollapse": true,
+        "stateSave":      true
     } );
 
     // Add event listener for opening and closing details
-    $('#example tbody').on('click', 'td.details-control', function () {
+    $('#database_table tbody').on('click', 'td.details-control', function () {
         var tr = $(this).closest('tr');
         var row = table.row( tr );
 
@@ -119,4 +108,51 @@ $(document).ready(function() {
             tr.addClass('shown');
         }
     } );
-} );
+
+    // show modal
+    $('#functionModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget); // Button that triggered the modal
+        var option = button.data('option');
+        var label = button.data('label');
+        var title = button.html();
+
+        var modal = $(this);
+        modal.find('.modal-title').text(title);
+        modal.find('.modal-body label').html(label);
+        var submit =  modal.find('#submit-data');
+        submit.html(title);
+
+        submit.off('click').on('click', function () {
+            var data = modal.find('.modal-body input').val();
+            deactivate(option, data);
+            modal.find('.modal-body input').val("");
+            modal.modal('hide');
+        });
+    });
+
+
+    function deactivate(option, data){
+        $.ajax({
+            'url':'includes/deactivate.php',
+            'type':'POST',
+            'async':false,
+            'data':{ 'option' : option,
+                     'data' : data
+            },
+            error: function (request, status, error) {
+                alert("ERROR with ajax function");
+            },
+            'success':function(data){
+
+                var modal= $('#infoModal');
+                modal.find('.modal-body p').html(data);
+                modal.modal('show');
+                table.ajax.reload(null, false);
+            }
+        });
+    }
+
+
+
+});
+

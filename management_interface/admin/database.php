@@ -47,10 +47,16 @@
 
     <!-- Begin page content -->
     <div class="container">
-        <div class="page-header">
+        <!--<div class="page-header">
             <h1>Datenbank</h1>
-        </div>
-        <table id="example" class="display" cellspacing="0" width="100%">
+        </div>-->
+
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#functionModal" data-option="vid" data-label="VID:">Voucher deaktivieren</button>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#functionModal" data-option="mac" data-label="MAC-Adresse:">MAC-Adresse deaktivieren</button>
+
+        <hr>
+
+        <table id="database_table" class="display" cellspacing="0" width="100%">
             <thead>
             <tr>
                 <th></th>
@@ -91,6 +97,48 @@
     </footer>
 
 </div> <!-- /container -->
+
+<div class="modal fade" id="functionModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="functionModalLabel">Deaktivieren</h4>
+            </div>
+            <div class="modal-body" >
+                <form class="form-inline">
+                    <div class="form-group">
+                        <label for="input-data" class="control-label">Eingabe:</label>
+                        <input type="text" class="form-control" id="input-data">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
+                <button type="submit" id="submit-data" class="btn btn-primary">deaktivieren</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="infoModalLabel">Deaktivieren</h4>
+            </div>
+            <div class="modal-body" >
+                <p> </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Schließen</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <script src="includes/js/jquery-1.12.2.min.js"></script>
 <script type="text/javascript" src="includes/js/datatables.min.js"></script>
 <script src="includes/js/bootstrap.min.js"></script>

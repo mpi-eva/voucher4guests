@@ -258,8 +258,6 @@ class VoucherService
                                AND v.canceled != '1' LIMIT 0,1");
 
         if (!empty($result)) {
-            // $update = $db->query("UPDATE vouchers SET canceled = '1', expiration_time=NOW() WHERE vid=" . $result[0]['vid']);
-            // $update = $db->query("UPDATE mac_addresses SET active = '0' WHERE vid=" . $result[0]['vid']." AND mac_address='".$mac."'");
             $update = $db->query("UPDATE mac_addresses SET active = '0', deactivation_time = NOW() WHERE mid=" . $result[0]['mid']);
 
             if ($update) {
