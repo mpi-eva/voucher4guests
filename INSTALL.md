@@ -3,7 +3,7 @@
 ## requirements on your voucher gateway
 
 OS: 
-* reference platform ubuntu 10.04 LTS (Lucid Lynx)
+* reference platform ubuntu 16.04 LTS (Lucid Lynx)
 * -> default install with NO additional software packages
 
 network: 
@@ -12,7 +12,7 @@ network:
 * optional: managementinterface
 
 software: (ubuntu packages)
-* apache2 php5 libapache2-mod-php5 mysql-server php5-mysql
+* php7.0 php7.0-cli php7.0-intl libapache2-mod-php7.0 mysql-server php7.0-mysql apache2-utils
 
 guestnetwork:
 * with working dhcp service, dhcp relay service or static ip's 
