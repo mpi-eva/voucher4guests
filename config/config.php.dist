@@ -77,8 +77,4 @@ return array(
      */
     'voucher_retention_period' => '60 DAY',
 
-    /**
-    * Logging
-    */
-    'logging_activated' => false,
 );

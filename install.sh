@@ -26,7 +26,7 @@ exit 0
 fi
 
 
-pakete=( apache2 php5 php5-cli php5-intl libapache2-mod-php5 mysql-server php5-mysql apache2-utils)
+pakete=( apache2 php7.0 php7.0-cli php5-intl libapache2-mod-php7.0 mysql-server php7.0-mysql apache2-utils)
 
 anz_elemente=${#pakete[*]};
 
@@ -74,7 +74,6 @@ fi
   # copy config.dist files
   /bin/cp $installPATH/config/config.php.dist $installPATH/config/config.php | tee -a $LOG
   /bin/cp $installPATH/config/database.config.php.dist $installPATH/config/database.config.php | tee -a $LOG
-  /bin/cp $installPATH/config/log_database.config.php.dist $installPATH/config/log_database.config.php | tee -a $LOG
 
 #<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
   echo -e "- Setup sudoers\n" | tee -a $LOG

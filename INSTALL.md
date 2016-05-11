@@ -26,24 +26,12 @@ guestnetwork:
 * untar installation package 
 
 * install following software packages with apt-get:
-  apache2 php5 php5-cli php5-intl libapache2-mod-php5 mysql-server php5-mysql apache2-utils
+  apache2 php7.0 php7.0-cli php7.0-intl libapache2-mod-php7.0 mysql-server php7.0-mysql apache2-utils
 
 * run install.sh for copying project files to /usr/local/voucher4guests (default dir)
   and setup configuration
 
 ----
-
-## enable logging
-
-* download free Adiscon LogAnalyzer from: 
-  http://download.adiscon.com/loganalyzer/loganalyzer-3.2.3.tar.gz
-  and save it in the same directory like the install scripts
-
-* install following software packages with apt-get: rsyslog-mysql 
-
-* run install_logging.sh for setup logging
-
----
 
 ## setup firewall
 
@@ -81,7 +69,7 @@ voucher4guests is running now
   Now you should be forwarded to your original website destination
 
 * on the admin page your can select "Database" an you get a list of all generated
-  vouchers, click on "Logging" and you will be forwarded to the logging screen
+  vouchers
 
 ---
 ## customize the system

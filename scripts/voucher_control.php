@@ -19,10 +19,3 @@ $vc->activateVoucher();
 # delete vouchers which are canceled and older than 60 days
 $vc->removeVoucher();
 
-
-if($config['logging_activated'] == true){
-    # checking log entries and delete them if there are older than 60 days
-    $vc->removeLogEntries();
-}
-
-

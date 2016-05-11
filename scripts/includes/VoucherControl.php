@@ -17,11 +17,6 @@ class VoucherControl
      * @var
      */
     private $dbConfig;
-    /**
-     * @var
-     */
-    private $logDbConfig;
-
 
     /**
      * @return array An Array with config values
@@ -45,18 +40,6 @@ class VoucherControl
         }
 
         return $this->dbConfig;
-    }
-
-    /**
-     * @return array An Array with the log database connection settings
-     */
-    public function getLogDbConfig()
-    {
-        if (!isset($this->logDbConfig)) {
-            $this->logDbConfig = include ('../config/database.config.php');
-        }
-
-        return $this->logDbConfig;
     }
 
     /**
@@ -143,23 +126,6 @@ class VoucherControl
             # remove entry
             $delete = $db->query("DELETE FROM vouchers WHERE vid='" . $row['vid'] . "'");
             print "voucher was deleted from database: VID=".$row['vid']." expiration time=".$row['expiration_time']."\n";
-        }
-    }
-
-    /**
-     * Check log entries and delete them if there are older than 60 days
-     *
-     * @return void
-     */
-    public function removeLogEntries()
-    {
-        print "check Syslog tables and delete entry older than 60 days\n";
-
-        $db = new Db($this->getLogDbConfig());
-        $result = $db->query("SELECT ID FROM SystemEvents WHERE ReceivedAt<=DATE_SUB(NOW(),INTERVAL 60 DAY)");
-        foreach($result as $row) {
-            #delete entries
-            $delete = $db->query("DELETE FROM SystemEvents WHERE ID='".$row['ID']."'");
         }
     }
 
