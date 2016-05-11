@@ -1,16 +1,17 @@
 <?php
-require_once 'Db.php';
-
-$db = new Db();
+require_once '../includes/Db.php';
 
 //load config
-//$config = include('../../config/database.config.php');
+$config = include('../../config/database.config.php');
+/*
 $config = array(
-    'db_base' => 'voucher_old',
-    'db_user' => 'root',
-    'db_password' => 'anna1992',
+    'db_base' => 'voucher4guests',
+    'db_user' => '',
+    'db_password' => '',
     'db_host' => 'localhost'
 );
+*/
+$db = new \Voucher\Scripts\Db($config);
 
 //test database connection
 print "\nTest database connection: ";
@@ -102,7 +103,7 @@ if ($db->query($sql) === true) {
 } else {
     print "ERROR\n";
     print " Error creating table: " . $db->error() . "\n";
-    abortUpdate($sql_file, $config);
+    abortUpdate($sql_file, $config, $db);
 }
 
 
@@ -162,7 +163,7 @@ print "\nUpdate successful\n";
 
 
 
-function abortUpdate($sql_file, $config, $db) {
+function abortUpdate($sql_file, $config, \Voucher\Scripts\Db $db) {
     print "\nUpdate aborted\n";
     print "\nRestore database\n";
     $sql="DROP TABLE IF EXISTS `mac_addresses`;";
