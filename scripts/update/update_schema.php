@@ -2,15 +2,15 @@
 require_once '../includes/Db.php';
 
 //load config
-$config = include('../../config/database.config.php');
-/*
+//$config = include('../../config/database.config.php');
+
 $config = array(
     'db_base' => 'voucher4guests',
     'db_user' => '',
     'db_password' => '',
     'db_host' => 'localhost'
 );
-*/
+
 $db = new \Voucher\Scripts\Db($config);
 
 //test database connection
