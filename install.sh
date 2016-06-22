@@ -12,7 +12,7 @@ exit 0
 fi
 
 
-pakete=( apache2 php7.0 php7.0-cli php7.0-intl libapache2-mod-php7.0 mysql-server php7.0-mysql apache2-utils)
+pakete=( apache2 php7.0 php7.0-cli php7.0-intl php7.0-xml php7.0-xmlrpc libapache2-mod-php7.0 mysql-server php7.0-mysql apache2-utils)
 
 anz_elemente=${#pakete[*]};
 
