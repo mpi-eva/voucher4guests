@@ -50,7 +50,7 @@ class VoucherControl
     public function deactivateVoucher()
     {
         $db = new Db($this->getDbConfig());
-        $result = $db->select("SELECT vid FROM vouchers WHERE canceled='0' AND (expiration_time<=NOW() AND expiration_time!='0000-00-00 00:00:00')");
+        $result = $db->select("SELECT vid FROM vouchers WHERE canceled='0' AND (expiration_time<=NOW() AND expiration_time!=NULL)");
         foreach($result as $row) {
 
 
@@ -82,7 +82,7 @@ class VoucherControl
     public function deactivateUnusedVoucher()
     {
         $db = new Db($this->getDbConfig());
-        $result = $db->select("SELECT vid FROM vouchers WHERE canceled='0' AND  (activation_time='0000-00-00 00:00:00' AND use_by_date<=NOW())");
+        $result = $db->select("SELECT vid FROM vouchers WHERE canceled='0' AND  (activation_time=NULL AND use_by_date<=NOW())");
         foreach($result as $row) {
             #mark this voucher as canceled in database
             $update = $db->query("UPDATE vouchers SET canceled = '1' WHERE vid='" . $row['vid'] . "'");

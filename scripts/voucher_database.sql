@@ -28,7 +28,7 @@ CREATE TABLE `vouchers` (
   `active`          TINYINT UNSIGNED  NOT NULL,
   `activation_time` DATETIME          NULL DEFAULT NULL,
   `expiration_time` DATETIME          NULL DEFAULT NULL,
-  `use_by_date`     DATETIME          NOT NULL,
+  `use_by_date`     DATETIME          NULL DEFAULT NULL,
   PRIMARY KEY (`vid`),
   INDEX `fk_vouchers_validities_idx` (`validity` ASC),
   CONSTRAINT `fk_vouchers_validities`
@@ -48,7 +48,7 @@ CREATE TABLE `mac_addresses` (
   `vid`               INT UNSIGNED      NOT NULL,
   `mac_address`       VARCHAR(12)       NOT NULL,
   `active`            TINYINT UNSIGNED  NOT NULL,
-  `activation_time`   DATETIME          NOT NULL,
+  `activation_time`   DATETIME          NULL DEFAULT NULL,
   `deactivation_time` DATETIME          NULL DEFAULT NULL,
   PRIMARY KEY (`mid`),
   INDEX `fk_mac_addresses_vouchers_idx` (`vid` ASC),

@@ -169,7 +169,7 @@ function generateVoucherCode(){
  * @param string $exp_time
  * @return bool
  */
-function createVoucher($quantity, $validity, $act_time = '0000-00-00 00:00:00', $exp_time = '0000-00-00 00:00:00')
+function createVoucher($quantity, $validity, $act_time = 'NULL', $exp_time = 'NULL')
 {
     //load config
     $config = include($_SERVER['DOCUMENT_ROOT'] . '/../config/config.php');
@@ -177,18 +177,39 @@ function createVoucher($quantity, $validity, $act_time = '0000-00-00 00:00:00', 
     $dbConfig = include($_SERVER['DOCUMENT_ROOT'] . '/../config/database.config.php');
     $db = new \Voucher\ManagementInterface\Db($dbConfig);
 
+    //a from-to voucher (validity 0) needs necessarily start and end dates.
+    if ($validity == '0' AND ($act_time == 'NULL' OR $exp_time == 'NULL')) {
+        return false;
+    }
+
     for ($i = 1; $i <= $quantity; $i++) {
 
         $voucher_code = generateVoucherCode();
+        //default values
+        $canceled = '0';
+        $printed = '0';
 
-        if ($validity == "0") {
+        if ($validity == '0') {
+            //from-to voucher
             $active = '0';
             if ($act_time <= date('Y-m-d')) {
                 $active = '1';
             }
 
+            $act_time = $act_time . ' 00:00:00';
+            $exp_time = $exp_time . ' 23:59:59';
+            $use_by_date = $exp_time . ' 23:59:59';
+
             $insert = $db->query("INSERT INTO vouchers(voucher_code, validity, canceled, printed, active, activation_time, expiration_time, use_by_date)
-			   VALUES('" . $voucher_code . "', '0', '0', '0', '" . $active . "', '" . $act_time . " 00:00:00', '" . $exp_time . " 23:59:59', '" . $exp_time . " 23:59:59')");
+			   VALUES('"
+                . $voucher_code .  "', '"
+                . $validity . "', '"
+                . $canceled . "', '"
+                . $printed . "', '"
+                . $active . "', '"
+                . $act_time . "', '"
+                . $exp_time . "', '"
+                . $use_by_date . "')");
 
             if (!$insert) {
                 //can't insert entry
@@ -196,9 +217,16 @@ function createVoucher($quantity, $validity, $act_time = '0000-00-00 00:00:00', 
             }
         } else {
             $use_by_date = "DATE_ADD(NOW(), INTERVAL " .$config['voucher_lifetime'].")";
+            $active = '1';
 
             $insert = $db->query("INSERT INTO vouchers(voucher_code, validity, canceled, printed, active, use_by_date)
-			VALUES('" . $voucher_code . "', '" . $validity . "', '0', '0', '1', ".$use_by_date.")");
+			VALUES('"
+                . $voucher_code . "', '"
+                . $validity . "', '"
+                . $canceled . "', '"
+                . $printed . "', '"
+                . $active . "', "
+                . $use_by_date . ")");
 
             if (!$insert) {
                 print $db->error();

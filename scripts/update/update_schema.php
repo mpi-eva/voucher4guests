@@ -92,7 +92,7 @@ CREATE TABLE `mac_addresses` (
   `mac_address`       VARCHAR(12)       NOT NULL,
   `active`            TINYINT UNSIGNED  NOT NULL,
   `activation_time`   DATETIME          NOT NULL,
-  `deactivation_time` DATETIME,
+  `deactivation_time` DATETIME          NULL DEFAULT NULL,
   PRIMARY KEY (`mid`)
 );
 ";
@@ -140,7 +140,47 @@ if ($result) {
 //update other tables
 print "Update voucher table\n";
 //rename columns
-$sql="ALTER TABLE `vouchers` CHANGE `activ` `active` tinyint unsigned NOT NULL;";
+$sql="ALTER TABLE `vouchers` CHANGE `activ` `active` TINYINT UNSIGNED NOT NULL;";
+$result = $db->query($sql);
+if ($result) {
+} else {
+    print "ERROR\n";
+    print " Error renaming column: " . $db->error() . "\n";
+    abortUpdate($sql_file, $config, $db);
+}
+
+//change column definition
+$sql="ALTER TABLE `vouchers` CHANGE `canceled` `canceled` TINYINT UNSIGNED NOT NULL DEFAULT '0';";
+$result = $db->query($sql);
+if ($result) {
+} else {
+    print "ERROR\n";
+    print " Error renaming column: " . $db->error() . "\n";
+    abortUpdate($sql_file, $config, $db);
+}
+
+//change column definition
+$sql="ALTER TABLE `vouchers` CHANGE `activation_time` `activation_time` DATETIME NULL DEFAULT NULL;";
+$result = $db->query($sql);
+if ($result) {
+} else {
+    print "ERROR\n";
+    print " Error renaming column: " . $db->error() . "\n";
+    abortUpdate($sql_file, $config, $db);
+}
+
+//change column definition
+$sql="ALTER TABLE `vouchers` CHANGE `expiration_time` `expiration_time` DATETIME NULL DEFAULT NULL;";
+$result = $db->query($sql);
+if ($result) {
+} else {
+    print "ERROR\n";
+    print " Error renaming column: " . $db->error() . "\n";
+    abortUpdate($sql_file, $config, $db);
+}
+
+//change column definition
+$sql="ALTER TABLE `vouchers` CHANGE `use_by_date` `use_by_date ` DATETIME NULL DEFAULT NULL;";
 $result = $db->query($sql);
 if ($result) {
 } else {
