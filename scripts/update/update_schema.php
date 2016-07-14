@@ -91,7 +91,7 @@ CREATE TABLE `mac_addresses` (
   `vid`               INT UNSIGNED      NOT NULL,
   `mac_address`       VARCHAR(12)       NOT NULL,
   `active`            TINYINT UNSIGNED  NOT NULL,
-  `activation_time`   DATETIME          NOT NULL,
+  `activation_time`   DATETIME          NULL DEFAULT NULL,
   `deactivation_time` DATETIME          NULL DEFAULT NULL,
   PRIMARY KEY (`mid`)
 );
@@ -139,6 +139,18 @@ if ($result) {
 
 //update other tables
 print "Update voucher table\n";
+
+
+//rename columns
+$sql="SET SESSION sql_mode = '';";
+$result = $db->query($sql);
+if ($result) {
+} else {
+    print "ERROR\n";
+    print " Error setting sql_mode: " . $db->error() . "\n";
+    abortUpdate($sql_file, $config, $db);
+}
+
 //rename columns
 $sql="ALTER TABLE `vouchers` CHANGE `activ` `active` TINYINT UNSIGNED NOT NULL;";
 $result = $db->query($sql);
@@ -155,7 +167,7 @@ $result = $db->query($sql);
 if ($result) {
 } else {
     print "ERROR\n";
-    print " Error renaming column: " . $db->error() . "\n";
+    print " Error changing column definition: " . $db->error() . "\n";
     abortUpdate($sql_file, $config, $db);
 }
 
@@ -165,7 +177,7 @@ $result = $db->query($sql);
 if ($result) {
 } else {
     print "ERROR\n";
-    print " Error renaming column: " . $db->error() . "\n";
+    print " Error changing column definition: " . $db->error() . "\n";
     abortUpdate($sql_file, $config, $db);
 }
 
@@ -175,17 +187,47 @@ $result = $db->query($sql);
 if ($result) {
 } else {
     print "ERROR\n";
-    print " Error renaming column: " . $db->error() . "\n";
+    print " Error changing column definition: " . $db->error() . "\n";
     abortUpdate($sql_file, $config, $db);
 }
 
 //change column definition
-$sql="ALTER TABLE `vouchers` CHANGE `use_by_date` `use_by_date ` DATETIME NULL DEFAULT NULL;";
+$sql="ALTER TABLE `vouchers` CHANGE `use_by_date` `use_by_date` DATETIME NULL DEFAULT NULL;";
 $result = $db->query($sql);
 if ($result) {
 } else {
     print "ERROR\n";
-    print " Error renaming column: " . $db->error() . "\n";
+    print " Error changing column definition: " . $db->error() . "\n";
+    abortUpdate($sql_file, $config, $db);
+}
+
+//replace 0-dates with real NULL-values
+$sql="UPDATE `vouchers` SET `activation_time` = NULL WHERE `activation_time` = '0000-00-00 00:00:00';";
+$result = $db->query($sql);
+if ($result) {
+} else {
+    print "ERROR\n";
+    print " Error replacing unknown date values: " . $db->error() . "\n";
+    abortUpdate($sql_file, $config, $db);
+}
+
+//replace 0-dates with real NULL-values
+$sql="UPDATE `vouchers` SET `expiration_time` = NULL WHERE `expiration_time` = '0000-00-00 00:00:00';";
+$result = $db->query($sql);
+if ($result) {
+} else {
+    print "ERROR\n";
+    print " Error replacing unknown date values: " . $db->error() . "\n";
+    abortUpdate($sql_file, $config, $db);
+}
+
+//replace 0-dates with real NULL-values
+$sql="UPDATE `vouchers` SET `use_by_date` = NULL WHERE `use_by_date` = '0000-00-00 00:00:00';";
+$result = $db->query($sql);
+if ($result) {
+} else {
+    print "ERROR\n";
+    print " Error replacing unknown date values: " . $db->error() . "\n";
     abortUpdate($sql_file, $config, $db);
 }
 
@@ -208,7 +250,7 @@ function abortUpdate($sql_file, $config, \Voucher\Scripts\Db $db) {
     print "\nRestore database\n";
     $sql="DROP TABLE IF EXISTS `mac_addresses`;";
     $db->query($sql);
-    exec("mysql -u ".$config['db_user']." -p'".$config['db_password']."' < ".$sql_file);
+    exec("mysql -u ".$config['db_user']." -p'".$config['db_password']."' ".$config['db_base']." < ".$sql_file);
     exit(0);
 }
 
