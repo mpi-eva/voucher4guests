@@ -101,7 +101,7 @@ www-data ALL=(ALL) NOPASSWD: /sbin/iptables -D GUEST -t nat -m mac --mac-source 
 	echo "
 
 # service maintenance and backup scripts for voucher4guests installation
-0 0    * * *   root    /usr/bin/php5 $installPATH/scripts/voucher_control.php >> /var/log/voucher.log
+0 0    * * *   root    /usr/bin/php $installPATH/scripts/voucher_control.php >> /var/log/voucher.log
 0 1    * * *   root    /bin/bash $installPATH/scripts/db_backup.sh > /dev/null
   	" >> /etc/crontab
   fi
