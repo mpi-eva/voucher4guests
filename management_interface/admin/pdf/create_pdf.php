@@ -198,7 +198,7 @@ function createVoucher($quantity, $validity, $act_time = 'NULL', $exp_time = 'NU
 
             $act_time = $act_time . ' 00:00:00';
             $exp_time = $exp_time . ' 23:59:59';
-            $use_by_date = $exp_time . ' 23:59:59';
+            $use_by_date = $exp_time;
 
             $insert = $db->query("INSERT INTO vouchers(voucher_code, validity, canceled, printed, active, activation_time, expiration_time, use_by_date)
 			   VALUES('"
@@ -212,6 +212,7 @@ function createVoucher($quantity, $validity, $act_time = 'NULL', $exp_time = 'NU
                 . $use_by_date . "')");
 
             if (!$insert) {
+                print $db->error();
                 //can't insert entry
                 return false;
             }
