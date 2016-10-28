@@ -182,6 +182,10 @@ function createVoucher($quantity, $validity, $act_time = 'NULL', $exp_time = 'NU
         return false;
     }
 
+    $act_time_full = $act_time . ' 00:00:00';
+    $exp_time_full = $exp_time . ' 23:59:59';
+    $use_by_date = $exp_time_full;
+
     for ($i = 1; $i <= $quantity; $i++) {
 
         $voucher_code = generateVoucherCode();
@@ -196,10 +200,6 @@ function createVoucher($quantity, $validity, $act_time = 'NULL', $exp_time = 'NU
                 $active = '1';
             }
 
-            $act_time = $act_time . ' 00:00:00';
-            $exp_time = $exp_time . ' 23:59:59';
-            $use_by_date = $exp_time;
-
             $insert = $db->query("INSERT INTO vouchers(voucher_code, validity, canceled, printed, active, activation_time, expiration_time, use_by_date)
 			   VALUES('"
                 . $voucher_code .  "', '"
@@ -207,8 +207,8 @@ function createVoucher($quantity, $validity, $act_time = 'NULL', $exp_time = 'NU
                 . $canceled . "', '"
                 . $printed . "', '"
                 . $active . "', '"
-                . $act_time . "', '"
-                . $exp_time . "', '"
+                . $act_time_full . "', '"
+                . $exp_time_full . "', '"
                 . $use_by_date . "')");
 
             if (!$insert) {
