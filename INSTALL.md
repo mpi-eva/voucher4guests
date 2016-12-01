@@ -17,7 +17,7 @@ software: (ubuntu packages)
 guestnetwork:
 * with working dhcp service, dhcp relay service or static ip's 
 * with working domain name service (dns)
--> both can be optional installed on this voucher gateway
+* INSTALL.md-> both can be optional installed on this voucher gateway
 
 ---
 

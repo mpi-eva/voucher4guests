@@ -1,6 +1,5 @@
 AuthName "Voucher4guests - Administration"
 AuthType Basic
-#AuthUserFile /usr/local/voucher4guests/management_interface/admin/.htpasswd
-AuthUserFile /home/alex/dev/voucher/management_interface/admin/.htpasswd
+AuthUserFile /usr/local/voucher4guests/management_interface/admin/.htpasswd
 require valid-user
 
