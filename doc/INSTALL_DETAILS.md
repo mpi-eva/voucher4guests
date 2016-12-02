@@ -53,27 +53,29 @@ This can be done by editing the `/etc/sudoers` file or adding a file to the incl
 - Create the include directory if it does not exist:
 
 ```bash
-mkdir /etc/sudoers.d
+ mkdir /etc/sudoers.d
 ```
 - Set the include folder in the ´/etc/sudoers´ file. 
+
 ```bash
-echo "#includedir /etc/sudoers.d" >> /etc/sudoers
+ echo "#includedir /etc/sudoers.d" >> /etc/sudoers
 ```
+
 - Create the new config file with the following content.  
+
 ```bash
-
 echo "
-# activate and/or disable mac address in running iptables ruleset
+ # activate and/or disable mac address in running iptables ruleset
 
-www-data ALL=(ALL) NOPASSWD: /sbin/iptables -I GUEST 1 -t nat -m mac --mac-source ??\:??\:??\:??\:??\:?? -j ACCEPT
-www-data ALL=(ALL) NOPASSWD: /sbin/iptables -D GUEST -t nat -m mac --mac-source ??\:??\:??\:??\:??\:?? -j ACCEPT
+ www-data ALL=(ALL) NOPASSWD: /sbin/iptables -I GUEST 1 -t nat -m mac --mac-source ??\:??\:??\:??\:??\:?? -j ACCEPT
+ www-data ALL=(ALL) NOPASSWD: /sbin/iptables -D GUEST -t nat -m mac --mac-source ??\:??\:??\:??\:??\:?? -j ACCEPT
   " > /etc/sudoers.d/voucher4guests
 ```
 
 - Adjust the permissions of the file.
 
 ```bash
-chmod 0440 /etc/sudoers.d/voucher4guests
+ chmod 0440 /etc/sudoers.d/voucher4guests
 ```
 
 ### Setup the cronjobs
@@ -109,7 +111,7 @@ echo "/var/log/voucher.log
 
 And adjust the permissions of the file.
 ```bash
-/bin/chmod 0440 /etc/logrotate.d/voucher4guests
+ chmod 0440 /etc/logrotate.d/voucher4guests
 ```
  
  
@@ -119,7 +121,7 @@ For the creation of the Database sipmly run the supplied sql script `scripts/vou
 
 You can use the following command to apply the script. You have to enter the mysql root password.
 ```bash
-mysql -u root -p < /usr/local/voucher4guests/scripts/voucher_database.sql
+ mysql -u root -p < /usr/local/voucher4guests/scripts/voucher_database.sql
 ```
  
 Futhermore a datebase user is necessary. You can create a new database user or use an existing.
@@ -152,7 +154,9 @@ Some configurations have to be adapted to your own requirements.
  - `Directory` with the corresponding DocumentRoot directories
  
 The server name must also be set in the config file `/usr/local/voucher4guests/config/config.php`.
-`'domain_name' => 'servername.example.com'`
+```
+'domain_name' => 'servername.example.com'
+```
 
 The system needs to redirect user, so the `ssl` and the `rewrite` apache modules have to be enabled.
 ```
