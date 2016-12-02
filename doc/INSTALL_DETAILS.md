@@ -49,8 +49,9 @@ The captive portal system must be able to manipulate the firewall rules to en/di
 Therefore the scripts adds or removes a firewall rule for each device (mac address). 
 This commands need root privileges for the executing user, in this case for the webserver user `www-data`.
 
-This can be done by editing the ´/etc/sudoers´ file or adding a file to the include directory. 
+This can be done by editing the `/etc/sudoers` file or adding a file to the include directory. 
 - Create the include directory if it does not exist:
+
 ```bash
 mkdir /etc/sudoers.d
 ```
@@ -60,6 +61,7 @@ echo "#includedir /etc/sudoers.d" >> /etc/sudoers
 ```
 - Create the new config file with the following content.  
 ```bash
+
 echo "
 # activate and/or disable mac address in running iptables ruleset
 
@@ -67,9 +69,11 @@ www-data ALL=(ALL) NOPASSWD: /sbin/iptables -I GUEST 1 -t nat -m mac --mac-sourc
 www-data ALL=(ALL) NOPASSWD: /sbin/iptables -D GUEST -t nat -m mac --mac-source ??\:??\:??\:??\:??\:?? -j ACCEPT
   " > /etc/sudoers.d/voucher4guests
 ```
+
 - Adjust the permissions of the file.
-```
-/bin/chmod 0440 /etc/sudoers.d/voucher4guests
+
+```bash
+chmod 0440 /etc/sudoers.d/voucher4guests
 ```
 
 ### Setup the cronjobs
@@ -77,6 +81,7 @@ www-data ALL=(ALL) NOPASSWD: /sbin/iptables -D GUEST -t nat -m mac --mac-source 
 Configure the cronjobs for important scripts.
 
 ```bash
+
 echo "
 # service maintenance and backup scripts for voucher4guests installation
 0 0    * * *   root    /usr/bin/php /usr/local/voucher4guests/scripts/voucher_control.php >> /var/log/voucher.log
