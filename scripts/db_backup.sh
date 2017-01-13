@@ -1,23 +1,30 @@
 #!/bin/bash
-###############################################################################
-#NAME db_backup.sh  is part of the voucher4guests Project
-#SYNOPSIS voucher database daily backup
-#DESCRIPTION create vocher database dumps and deletes dumps older than 30 days  
-#AUTHOR Alexander Mueller, alexander_mueller at eva dot mpg dot de
-#VERSION 0.4
-#COPYRIGHT AND LICENSE
 #
-#(c) Alexander Mueller Lars Uhlemann
+# This file is part of voucher4guests.
 #
-#This software is released under GPLv2 license - see
-#http://www.gnu.org/licenses/gpl-2.0.html
-##############################################################################
+# voucher4guests Project - An open source captive portal system
+# Copyright (C) 2016. Alexander Müller, Lars Uhlemann
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+
 
 datum=`/bin/date '+%d%m%y'`;
 backupPath="/usr/local/voucher4guests";
 
 # create backup file
-/usr/bin/mysqldump -u db_user -ppassword --opt voucher > $backupPath/mysql_backup/backup_voucher_db$datum.sql
+/usr/bin/mysqldump -u db_user -ppassword --opt voucher4guests > $backupPath/mysql_backup/backup_voucher_db$datum.sql
 
 
 # delete backup files older than 30 days

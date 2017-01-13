@@ -1,0 +1,161 @@
+/*
+ * This file is part of voucher4guests.
+ *
+ * voucher4guests Project - An open source captive portal system
+ * Copyright (C) 2016. Alexander Müller, Lars Uhlemann
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/* Space out content a bit */
+body {
+    padding-top: 40px;
+    padding-bottom: 20px;
+    background: #eee none repeat scroll 0 0;
+}
+
+.container.main {
+    background-color: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 0px;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+    padding: 20px 25px 6px;
+}
+
+.header,
+.footer {
+    padding-right: 15px;
+    padding-left: 15px;
+}
+
+.header {
+    padding-top: 5px;
+    padding-bottom: 15px;
+    margin-bottom: 30px;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+/* Make the masthead heading the same height as the navigation */
+.header h3 {
+    margin-top: 0;
+    margin-bottom: 0;
+    line-height: 40px;
+}
+
+.nav-lang {
+    margin-right: 0;
+}
+
+.box {
+    background-color: #f8f8f8;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 0px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px 15px;
+}
+
+.box-header h4 {
+    margin: 0;
+    font-size: 20px;
+}
+
+.box-header {
+    margin-bottom: 20px;
+}
+
+.box-footer {
+    margin-top: 40px;
+    margin-bottom: 30px;
+}
+
+.pointer-link {
+    cursor: pointer;
+}
+
+.voucher-input .panel-heading {
+    padding: 10px;
+    margin-bottom: 15px;
+}
+
+.voucher-input .panel-title {
+    fonti-size: 18px;
+}
+
+.first-headline {
+    margin-top: 0;
+}
+
+/* Custom page footer */
+.footer {
+    margin-top: 30px;
+    padding-top: 12px;
+    color: #777;
+    border-top: 1px solid #e5e5e5;
+}
+
+/* Customize container */
+@media (min-width: 768px) {
+    .container {
+        max-width: 760px;
+    }
+}
+
+.container-narrow > hr {
+    margin: 30px 0;
+}
+
+/* Responsive: Portrait tablets and up */
+@media screen and (min-width: 768px) {
+    /* Remove the padding we set earlier */
+    .header,
+    .marketing,
+    .footer {
+        padding-right: 0;
+        padding-left: 0;
+    }
+}
+
+/* Responsive: phones */
+@media screen and (max-width: 768px) {
+    body {
+        padding-top: 0;
+        padding-bottom: 0;
+        background: #fff;
+    }
+
+    .container.main {
+        margin: 0;
+        padding: 20px 15px 6px;
+        border: none;
+        box-shadow: none;
+    }
+
+    .header {
+        margin-bottom: 15px;
+    }
+
+    .box {
+        margin-bottom: 30px;
+    }
+
+    .box-footer {
+        margin-bottom: 10px;
+        margin-top: 25px;
+    }
+}
+
+.res-btn {
+    white-space: normal;
+}
+    

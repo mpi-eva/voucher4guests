@@ -1,17 +1,22 @@
 #!/bin/bash
-###############################################################################
-#NAME install.sh  is part of the voucher4guests Project
-#SYNOPSIS voucher4guests install script
-#DESCRIPTION automatic install script of voucher4guests project
-#AUTHOR Alexander Mueller, alexander_mueller at eva dot mpg dot de
-#VERSION 0.4a
-#COPYRIGHT AND LICENSE
 #
-#(c) Alexander Mueller Lars Uhlemann
+# This file is part of voucher4guests.
 #
-#This software is released under GPLv2 license - see
-#http://www.gnu.org/licenses/gpl-2.0.html
-##############################################################################
+# voucher4guests Project - An open source captive portal system
+# Copyright (C) 2016. Alexander Müller, Lars Uhlemann
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
 LOG="installlog.txt"
@@ -26,7 +31,7 @@ exit 0
 fi
 
 
-pakete=( apache2 php5 php5-cli libapache2-mod-php5 mysql-server php5-mysql )
+pakete=( apache2 php7.0 php7.0-cli php7.0-intl php7.0-xml php7.0-xmlrpc libapache2-mod-php7.0 mysql-server php7.0-mysql apache2-utils)
 
 anz_elemente=${#pakete[*]};
 
@@ -34,7 +39,7 @@ for((i=0;i<$anz_elemente;i++)); do
   inst=`/usr/bin/dpkg -l ${pakete[$i]} 2>/dev/null | awk '/ii/ { print $1 }'`
   if [ "$inst" == "ii" ]; then
      unset pakete[$i];
-  fi 
+  fi
 done
 
 
@@ -44,7 +49,7 @@ if [ ${#pakete[*]} -gt 0 ]; then
 fi
 
 # save the mysql password from previous installations and create backup firewall config (voucher.fw)
-if [ -f $installPATH/config/database.php ];  then
+if [ -f $installPATH/config/database.config.php ];  then
 	echo -n "- Found a previous installation, continue (yes/no)?: "
 	read prev_ans
 	case "$prev_ans" in
@@ -56,9 +61,9 @@ if [ -f $installPATH/config/database.php ];  then
 		exit
 	;;
 	esac
-	
-	DB_PW=`grep "\$conf\['db_password'\]" $installPATH/config/database.php | sed "s/\\$conf\['db_password'\] = '\(.*\)';/\1/"`;
- 
+
+	DB_PW=`sed -ne "/'db_password'/s/.*'db_password' => '\(.*\)'.*/\1/p" /$installPATH/config/database.config.php`;
+
 	# backup the firewall script
 	/bin/cp $installPATH/scripts/voucher.fw $installPATH/scripts/voucher.fw.bac | tee -a $LOG
 fi
@@ -69,8 +74,11 @@ fi
     mkdir $installPATH | tee -a $LOG
   fi
 
-  /bin/cp -r voucher/ voucher_ssl/ config/ scripts/ doc/ $installPATH/ | tee -a $LOG
+  /bin/cp -r user_interface/ management_interface/ config/ scripts/ doc/ $installPATH/ | tee -a $LOG
 
+  # copy config.dist files
+  /bin/cp $installPATH/config/config.php.dist $installPATH/config/config.php | tee -a $LOG
+  /bin/cp $installPATH/config/database.config.php.dist $installPATH/config/database.config.php | tee -a $LOG
 
 #<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
   echo -e "- Setup sudoers\n" | tee -a $LOG
@@ -86,33 +94,33 @@ fi
   fi
 
   if [ ! -d /etc/sudoers.d ];  then
-    mkdir /etc/sudoers.d 
+    mkdir /etc/sudoers.d
   fi
- 
+
   echo "
 # activate and/or disable mac address in running iptables ruleset
 
 www-data ALL=(ALL) NOPASSWD: /sbin/iptables -I GUEST 1 -t nat -m mac --mac-source ??\:??\:??\:??\:??\:?? -j ACCEPT
-www-data ALL=(ALL) NOPASSWD: /sbin/iptables -D GUEST -t nat -m mac --mac-source ??\:??\:??\:??\:??\:?? -j ACCEPT 
-  " > /etc/sudoers.d/voucher4guests 
-  
+www-data ALL=(ALL) NOPASSWD: /sbin/iptables -D GUEST -t nat -m mac --mac-source ??\:??\:??\:??\:??\:?? -j ACCEPT
+  " > /etc/sudoers.d/voucher4guests
+
   /bin/chmod 0440 /etc/sudoers.d/voucher4guests
 
 
 #<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
   echo -e "- Setup cronjob for maintanance\n" | tee -a $LOG
-  
+
   if [ ! -f /etc/crontab_backup ];  then
     cp /etc/crontab /etc/crontab_backup
   fi
-  
+
   cron=`grep "# service maintenance and backup scripts for voucher4guests installation" /etc/crontab`
 
   if [ $? -gt 0 ]; then
 	echo "
 
-# service maintenance and backup scripts for voucher4guests installation 
-0 0    * * *   root    /usr/bin/php5 $installPATH/scripts/check_voucher.php >> /var/log/voucher.log
+# service maintenance and backup scripts for voucher4guests installation
+0 0    * * *   root    /usr/bin/php $installPATH/scripts/voucher_control.php >> /var/log/voucher.log
 0 1    * * *   root    /bin/bash $installPATH/scripts/db_backup.sh > /dev/null
   	" >> /etc/crontab
   fi
@@ -154,11 +162,11 @@ echo "/var/log/voucher.log
     MYSQL=`which mysql`
 
     # create user
-    echo "GRANT ALL PRIVILEGES ON voucher.* TO 'db_user'@'localhost' IDENTIFIED BY '$DB_PW'; FLUSH PRIVILEGES;" >> $installPATH/scripts/voucher.sql
+    echo "GRANT ALL PRIVILEGES ON voucher4guests.* TO 'v4g_user'@'localhost' IDENTIFIED BY '$DB_PW'; FLUSH PRIVILEGES;" >> $installPATH/scripts/voucher_database.sql
 
-    # create database 
+    # create database
     echo -e "\nfor creation of database, the root password of mysql is needed! "
-    $MYSQL -u root -p < $installPATH/scripts/voucher.sql
+    $MYSQL -u root -p < $installPATH/scripts/voucher_database.sql
 
   ;;
   *) echo -e "\nMySQL setup was canceled!\n"
@@ -166,18 +174,15 @@ echo "/var/log/voucher.log
 esac
 
     # fill config files for database connection
-    /bin/sed -i "/\$conf\['db_user'\]/s/= '.*'/= 'db_user'/g" $installPATH/config/database.php  
-    /bin/sed -i "/\$conf\['db_password'\]/s/= '.*'/= '$DB_PW'/g" $installPATH/config/database.php  
-    /bin/sed -i "/\$conf\['db_host'\]/s/= '.*'/= 'localhost'/g" $installPATH/config/database.php  
+    /bin/sed -i "/'db_user'/s/=> '.*'/=> 'v4g_user'/g" $installPATH/config/database.config.php
+    /bin/sed -i "/'db_password'/s/=> '.*'/=> '$DB_PW'/g" $installPATH/config/database.config.php
+    /bin/sed -i "/'db_host'/s/=> '.*'/=> 'localhost'/g" $installPATH/config/database.config.php
 
-    /bin/sed -i 's/--password=".*" -D/--password="'$DB_PW'" -D/g' $installPATH/scripts/voucher.fw 
-    /bin/sed -i 's/--user=".*" --pass/--user="db_user" --pass/g' $installPATH/scripts/voucher.fw 
-
-    /bin/sed -i "/mysqldump/s/-p.* --opt/-p'$DB_PW' --opt/g" $installPATH/scripts/db_backup.sh
-    /bin/sed -i '/backupPath=/s|backupPath=".*"|backupPath="'$installPATH'"|g' $installPATH/scripts/db_backup.sh
-    if [ ! -d $installPATH/mysql_backup ];  then
-      /bin/mkdir $installPATH/mysql_backup
-    fi
+    #/bin/sed -i "/mysqldump/s/-p.* --opt/-p'$DB_PW' --opt/g" $installPATH/scripts/db_backup.sh --
+    #/bin/sed -i '/backupPath=/s|backupPath=".*"|backupPath="'$installPATH'"|g' $installPATH/scripts/db_backup.sh --
+    #if [ ! -d $installPATH/mysql_backup ];  then
+    #  /bin/mkdir $installPATH/mysql_backup
+    #fi
 
 
 #<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -197,58 +202,58 @@ esac
     read mail
 
     #set server name
-    /bin/sed -i "/ServerName/s|ServerName.*|ServerName $fqdn|g" $installPATH/scripts/vhosts/voucher
-    /bin/sed -i "/ServerName/s|ServerName.*|ServerName $fqdn|g" $installPATH/scripts/vhosts/voucher_ssl
+    /bin/sed -i "/ServerName/s|ServerName.*|ServerName $fqdn|g" $installPATH/scripts/vhosts/voucher4guests.conf
+    /bin/sed -i "/ServerName/s|ServerName.*|ServerName $fqdn|g" $installPATH/scripts/vhosts/voucher4guests_ssl.conf
 
    #set admin email address
-    /bin/sed -i "/ServerAdmin/s/ServerAdmin.*/ServerAdmin $mail/g" $installPATH/scripts/vhosts/voucher
-    /bin/sed -i "/ServerAdmin/s/ServerAdmin.*/ServerAdmin $mail/g" $installPATH/scripts/vhosts/voucher_ssl
+    /bin/sed -i "/ServerAdmin/s/ServerAdmin.*/ServerAdmin $mail/g" $installPATH/scripts/vhosts/voucher4guests.conf
+    /bin/sed -i "/ServerAdmin/s/ServerAdmin.*/ServerAdmin $mail/g" $installPATH/scripts/vhosts/voucher4guests_ssl.conf
 
     #set document root
-    /bin/sed -i "/DocumentRoot/s|DocumentRoot .*|DocumentRoot $installPATH\/voucher|g" $installPATH/scripts/vhosts/voucher
-    /bin/sed -i "/DocumentRoot/s|DocumentRoot .*|DocumentRoot $installPATH\/voucher_ssl|g" $installPATH/scripts/vhosts/voucher_ssl
+    /bin/sed -i "/DocumentRoot/s|DocumentRoot .*|DocumentRoot $installPATH\/user_interface|g" $installPATH/scripts/vhosts/voucher4guests.conf
+    /bin/sed -i "/DocumentRoot/s|DocumentRoot .*|DocumentRoot $installPATH\/management_interface|g" $installPATH/scripts/vhosts/voucher4guests_ssl.conf
 
     #set directory directive
-    /bin/sed -i "/Directory/s|Directory .*voucher\/|Directory $installPATH\/voucher\/|g" $installPATH/scripts/vhosts/voucher
-    /bin/sed -i "/Directory/s|Directory .*voucher_ssl\/|Directory $installPATH\/voucher_ssl\/|g" $installPATH/scripts/vhosts/voucher_ssl
+    /bin/sed -i "/Directory/s|Directory .*user_interface|Directory $installPATH\/user_interface|g" $installPATH/scripts/vhosts/voucher4guests.conf
+    /bin/sed -i "/Directory/s|Directory .*management_interface|Directory $installPATH\/management_interface|g" $installPATH/scripts/vhosts/voucher4guests_ssl.conf
 
     #set servername for redirect, important!
-    /bin/sed -i '/\$servername=/s|\$servername=".*";|\$servername="'$fqdn'";|g' $installPATH/voucher/includes/redirect.php 
+    /bin/sed -i "/'domain_name'/s/=> '.*'/=> '$fqdn'/g" $installPATH/config/config.php
 
     #create self-signet certificate
-    /usr/sbin/make-ssl-cert generate-default-snakeoil --force-overwrite 
-    
-    /usr/sbin/make-ssl-cert generate-default-snakeoil --force-overwrite 
-    
+    /usr/sbin/make-ssl-cert generate-default-snakeoil --force-overwrite
+
+    /usr/sbin/make-ssl-cert generate-default-snakeoil --force-overwrite
+
     #activate ssl and auth apache modules
-    /usr/sbin/a2enmod ssl rewrite    
+    /usr/sbin/a2enmod ssl rewrite
 
     vhost=`/usr/bin/find /etc/apache2/sites-enabled/ -type l -or -type f`
-    
-    if [ "$vhost" == "" ]; then
-       /bin/cp $installPATH/scripts/vhosts/voucher /etc/apache2/sites-available/
-       /bin/cp $installPATH/scripts/vhosts/voucher_ssl /etc/apache2/sites-available/
 
-       /bin/ln -s /etc/apache2/sites-available/voucher /etc/apache2/sites-enabled/voucher
-       /bin/ln -s /etc/apache2/sites-available/voucher_ssl /etc/apache2/sites-enabled/voucher_ssl
+    if [ "$vhost" == "" ]; then
+       /bin/cp $installPATH/scripts/vhosts/voucher4guests.conf /etc/apache2/sites-available/
+       /bin/cp $installPATH/scripts/vhosts/voucher4guests_ssl.conf /etc/apache2/sites-available/
+
+       /bin/ln -s /etc/apache2/sites-available/voucher4guests.conf /etc/apache2/sites-enabled/voucher4guests.conf
+       /bin/ln -s /etc/apache2/sites-available/voucher4guests_ssl.conf /etc/apache2/sites-enabled/voucher4guests_ssl.conf
     else
 
-      echo -e "\n There already exist webserver configurations files for virtual Hosts: \n" 
+      echo -e "\n There already exist webserver configurations files for virtual Hosts: \n"
       echo "This files will be overwritten! : "
       /usr/bin/find /etc/apache2/sites-enabled/ -type l -or -type f
-      echo -e "\n" 
+      echo -e "\n"
       echo -n "Do you want to continue (yes/no)?: "
       read vhost_ans
 
       case "$vhost_ans" in
 
       Yes|yes|Y|y|Ja|ja|J|j|"")
-        /bin/cp $installPATH/scripts/vhosts/voucher /etc/apache2/sites-available/
-        /bin/cp $installPATH/scripts/vhosts/voucher_ssl /etc/apache2/sites-available/
+        /bin/cp $installPATH/scripts/vhosts/voucher4guests.conf /etc/apache2/sites-available/
+        /bin/cp $installPATH/scripts/vhosts/voucher4guests_ssl.conf /etc/apache2/sites-available/
 
 	/bin/rm /etc/apache2/sites-enabled/*
-        /bin/ln -s /etc/apache2/sites-available/voucher /etc/apache2/sites-enabled/voucher
-        /bin/ln -s /etc/apache2/sites-available/voucher_ssl /etc/apache2/sites-enabled/voucher_ssl
+        /bin/ln -s /etc/apache2/sites-available/voucher4guests.conf /etc/apache2/sites-enabled/voucher4guests.conf
+        /bin/ln -s /etc/apache2/sites-available/voucher4guests_ssl.conf /etc/apache2/sites-enabled/voucher4guests_ssl.conf
 
       ;;
       *)
@@ -262,14 +267,14 @@ esac
     /usr/sbin/service apache2 restart
 
   ;;
-  *) 
+  *)
     echo -e "\nApache setup was canceled!\n"
-    
-    echo -n "Please insert the Full Qualified Domain Name (FQDN) of this host here: " | tee -a $LOG    
+
+    echo -n "Please insert the Full Qualified Domain Name (FQDN) of this host here: " | tee -a $LOG
     read fqdn
 
     #set servername for redirect, important!
-    /bin/sed -i '/\$servername=/s|\$servername=".*";|\$servername="'$fqdn'";|g' $installPATH/voucher/includes/redirect.php
+    /bin/sed -i "/'domain_name'/s/=> '.*'/=> '$fqdn'/g" $installPATH/config/config.php
 
   ;;
 
@@ -279,15 +284,15 @@ esac
 #<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
   echo -e  "\n- Setup .htaccess for administrator access (generate/manage vouchers and view logs)\n" | tee -a $LOG
 
-  /bin/sed -i "/AuthUserFile/s|AuthUserFile .*|AuthUserFile $installPATH\/voucher_ssl\/.htpasswd|g" $installPATH/voucher_ssl/.htaccess
+  /bin/sed -i "/AuthUserFile/s|AuthUserFile .*|AuthUserFile $installPATH\/management_interface\/.htpasswd|g" $installPATH/management_interface/.htaccess
 
-  echo -n "Please choose a username who should manage the administrators website: " 
-  read name 
+  echo -n "Please choose a username who should manage the administrators website: "
+  read name
 
-  if [ ! -f $installPATH/voucher_ssl/admin/.htpasswd ];  then
-    /usr/bin/htpasswd -c $installPATH/voucher_ssl/.htpasswd $name
+  if [ ! -f $installPATH/management_interface/.htpasswd ];  then
+    /usr/bin/htpasswd -c $installPATH/management_interface/.htpasswd $name
   else
-    /usr/bin/htpasswd $installPATH/voucher_ssl/.htpasswd $name
+    /usr/bin/htpasswd $installPATH/management_interface/.htpasswd $name
   fi
 
 echo -e "\n- voucher4guests project installation is finished!\n"

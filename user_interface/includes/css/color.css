@@ -1,0 +1,71 @@
+/*
+ * This file is part of voucher4guests.
+ *
+ * voucher4guests Project - An open source captive portal system
+ * Copyright (C) 2016. Alexander Müller, Lars Uhlemann
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+a {
+    color: #007165;
+}
+a:focus, a:hover {
+    color: #004C44;
+}
+
+
+.text-primary {
+    color: #007165;
+}
+
+.btn-primary {
+    background-color: #007165; 
+    border-color: #005C52;
+    color: #fff;
+}
+.btn-primary:hover {
+    background-color: #004C44;
+    border-color: #00332E;
+    color: #fff;
+}
+.btn-primary.focus, .btn-primary:focus {
+    background-color: #004C44;
+    border-color: #002B27;
+    color: #fff;
+}
+.btn-primary.active, .btn-primary:active, .open > .dropdown-toggle.btn-primary {
+    background-color: #004C44;
+    border-color: #00332E;
+    color: #fff;
+}
+.btn-primary.active.focus, .btn-primary.active:focus, .btn-primary.active:hover, .btn-primary.focus:active, .btn-primary:active:focus, .btn-primary:active:hover, .open > .dropdown-toggle.btn-primary.focus, .open > .dropdown-toggle.btn-primary:focus, .open > .dropdown-toggle.btn-primary:hover {
+    background-color: #00332E;
+    border-color: #002B27;
+    color: #fff;
+}
+.btn-primary.disabled, .btn-primary.disabled.active, .btn-primary.disabled.focus, .btn-primary.disabled:active, .btn-primary.disabled:focus, .btn-primary.disabled:hover, .btn-primary[disabled], .btn-primary.active[disabled], .btn-primary.focus[disabled], .btn-primary[disabled]:active, .btn-primary[disabled]:focus, .btn-primary[disabled]:hover, fieldset[disabled] .btn-primary, fieldset[disabled] .btn-primary.active, fieldset[disabled] .btn-primary.focus, fieldset[disabled] .btn-primary:active, fieldset[disabled] .btn-primary:focus, fieldset[disabled] .btn-primary:hover {
+    background-color: #007165; 
+    border-color: #005C52;
+}
+
+
+.panel-primary {
+    border-color: #007165;
+}
+.panel-primary > .panel-heading {
+    background-color: #007165;
+    border-color: #007165;
+    color: #fff;
+}

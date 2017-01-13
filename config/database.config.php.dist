@@ -1,0 +1,29 @@
+<?php
+
+/**
+ * Database Configuration
+ *
+ * Enter your local connection settings here.
+ */
+
+return array(
+    /**
+     * Database name
+     */
+    'db_base' => 'voucher4guests',
+
+    /**
+     * Database user
+     */
+    'db_user' => '',
+
+    /**
+     * Password for database user
+     */
+    'db_password' => '',
+
+    /**
+     * Database host
+     */
+    'db_host' => 'localhost',
+);

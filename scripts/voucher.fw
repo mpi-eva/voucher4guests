@@ -1,24 +1,30 @@
 #!/bin/bash
-###############################################################################
-#NAME voucher.fw  is part of the voucher4guests Project
-#SYNOPSIS initialize local firewall 
-#DESCRIPTION initialize local firewall and insert active mac addresses from
-#voucher database
-#AUTHOR Lars Uhlemann, lars_uhlemann at eva dot mpg dot de
-#AUTHOR Alexander Mueller, alexander_mueller at eva dot mpg dot de
-#VERSION 0.4
-#COPYRIGHT AND LICENSE 
 #
-#(c) Lars Uhlemann Alexander Mueller
+# This file is part of voucher4guests.
 #
-#This software is released under GPLv2 license - see 
-#http://www.gnu.org/licenses/gpl-2.0.html
-##############################################################################
+# voucher4guests Project - An open source captive portal system
+# Copyright (C) 2016. Alexander Müller, Lars Uhlemann
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
 
+cd "$(dirname "$0")"
 
 echo "1" > /proc/sys/net/ipv4/ip_forward # initialize forwarding 
 
 IPTABLES="/sbin/iptables"
+PHP="/usr/bin/php"
 
 # guest interface with ip definition 
 IFACE2GUEST="eth0"
@@ -110,7 +116,7 @@ $IPTABLES -A FORWARD -i $IFACE2GUEST -o $IFACE2INTERNET -j ACCEPT
 #allow new output connections 
 $IPTABLES -A OUTPUT -m state --state NEW -j ACCEPT
 
-# loging only traffic to outside
+# logging only traffic to outside
 $IPTABLES -N GUEST_LOG -t nat
 $IPTABLES -I PREROUTING 1 -t nat -i $IFACE2GUEST -m state --state NEW -j GUEST_LOG
 $IPTABLES -A GUEST_LOG -t nat -d $IP4GUEST_IF -j RETURN
@@ -121,13 +127,11 @@ $IPTABLES -A GUEST_LOG -t nat -j LOG --log-prefix "voucher2log "
 #$IPTABLES -I GUEST 1 -t nat -m mac --mac-source xx:xx:xx:xx:xx:xx  -j ACCEPT
 #
 
+
+
 # read active mac addresses from db an add them to fw rule table
-result=`mysql --user="db_user" --password="mpi" -D voucher --execute="SELECT mac FROM vouchers WHERE activ='1' && canceled='0' && mac != ''" | tail -n +2 | sed 's/\([0-9a-fA-F]\{2\}\)/\1:/g; s/:$//'`
+$PHP voucher_reload.php
 
-array=($result)
 
-for ((i=0; i<${#array[*]}; i++)) do
-	$IPTABLES -I GUEST 1 -t nat -m mac --mac-source ${array[$i]} -j ACCEPT 
-done
 
 

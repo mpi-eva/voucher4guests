@@ -1,0 +1,272 @@
+/*
+ * This file is part of voucher4guests.
+ *
+ * voucher4guests Project - An open source captive portal system
+ * Copyright (C) 2016. Alexander Müller, Lars Uhlemann
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+html {
+   padding:0px;
+   margin:0px;
+   height: 100%;
+}
+
+body {
+	color: #333333;
+    font-family: Verdana,Helvetica,Arial,sans-serif;
+    font-size: 16px;
+    padding: 0px;
+    margin: 0px;
+	height: 100%;
+}
+form {
+	margin: 0px;
+	padding: 0px;
+}
+
+p {
+	margin-top:10px;
+	margin-right:10px;
+	line-height:145%;
+	font-size: 0.9em;
+}
+a {
+	color: #21807A;
+    text-decoration: none;
+}
+a:hover { text-decoration: underline; }
+
+img { border: 0px; }
+
+h2 {
+	border-bottom: 1px dotted #999;
+    color: #21807A;
+    font-size: 1em;
+    font-weight: bold;
+	margin: 0px 0px 8px 0px;
+    padding-bottom: 3px;
+}
+h3 {
+	color: #000;
+	font-size: 1em;
+	margin: 20px 0px 0px 10px;
+}
+#wrap {
+	overflow: hidden;
+	width: 1000px;
+	position: relative;
+	top:0px;
+	margin: 0 auto;
+	border-left: 1px dotted #999;
+	border-right: 1px dotted #999;
+	min-height:100%;
+}
+* html #wrap { height: 100%; }
+
+#top {
+	height: 15px;
+	width: 100%;
+	background-color: #7DA7A6;
+	color: #fff;
+	font-size:0.7em;
+	padding-left: 20px;
+}
+.time {float:right; margin-right: 30px;}
+#header {
+	height: 120px;
+	border-bottom: 3px solid #7DA7A6;
+}
+ul.language {
+	float:right;
+	list-style:none;
+	display:inline;
+	margin:5px 3px 0px 0px;
+}
+ul.language li {
+	float:left;
+	margin:5px;
+	padding: 4px;
+	width:45px;
+}
+ul.language li#language_en{
+	background: #E8EEEE url(../../images/icons/icon_english.gif) no-repeat 3px center;
+    padding-left: 22px;
+	border: 1px solid #AAADAD;
+}
+ul.language li#language_de{
+	background: #E8EEEE url(../../images/icons/icon_german.gif) no-repeat 3px center;
+    padding-left: 22px;
+	border: 1px solid #AAADAD;
+}
+ul.language li a {
+	color: #666666;
+    display: block;
+    font-family: Verdana,Arial,Helvetica,sans-serif;
+    font-size: 0.625em;
+    text-decoration: none;
+	line-height: 12px;
+}
+.logo {
+	position:relative;
+	float:left;
+	left: 80px;
+	top: 20px;
+}
+#header h1 {
+	color: #21807A;
+	float:left;
+	margin: 35px 0px 0px 185px;
+	font-size: 2.3em;
+	font-family: Arial, Helvetica, sans-serif;
+}
+#menue{
+	width: 100%;
+	height: 24px;	
+	padding:0;
+	margin:0;
+	border-bottom: 3px solid #7DA7A6;
+	padding-bottom: 4px;
+	font-size:14px;
+}
+#menue ul{
+	padding:0;
+	margin:0;	
+}
+#menue li{
+	position: relative;
+	float: left;
+	list-style: none;
+	margin: 0;
+	padding: 0px 14px;
+	/*font-weight: bold;*/
+	border-right: 1px dotted #7DA7A6;	
+} 
+#menue li a{
+	display: block;
+	text-decoration:none;
+	text-align: center;
+	line-height: 30px;
+	color: #333333;
+} 
+#menue li a:hover{
+	color: #21807A;	
+}	
+#content {
+	padding-bottom: 9em;
+}
+.voucher {
+	position:relative;
+	float:left;
+	left: 15px;
+	padding-bottom: 20px; 
+	width: 291px;
+	background:transparent url(../../images/voucher_back.png) center bottom no-repeat;
+}
+.voucher_content {
+	background-color: #dae4e5;
+	border-left: 1px solid #7DA7A6; 
+	border-right: 1px solid #7DA7A6;
+	padding:10px;
+	padding-top: 32px;
+	padding-bottom:30px; 
+}
+.help {
+	position:relative;
+	float:right;
+	right: 15px;
+}
+.help a {
+	display:block;
+	padding-left: 20px;
+	margin-top: 3px;
+	font-size: 0.7em;
+	background: transparent url(../../images/icons/help.png) no-repeat 0px -2px;
+}
+
+#Formular .input_txt {
+	margin-top: 1em;
+	padding: 2px;
+	background-color: #fff;
+	border: 1px solid #7DA7A6; 
+}
+.calendarDateInput input, select{	
+   padding: 2px;
+	background-color: #fff;
+	border: 1px solid #7DA7A6;
+}
+#date2_Year_ID, #date1_Year_ID {
+	padding: 2px;
+	background-color: #fff;
+	border: 1px solid #7DA7A6; 	
+}
+.error_msg {
+	color: red;
+	font-size: 12px;	
+}
+.submit {
+	background-color: #C9DBD8;
+	border: 1px solid #7DA7A6;
+	width: 80px;
+	padding:3px;
+	float:right;
+	margin-right:8px;
+}
+.inner_content {
+	margin-left: 320px;
+	padding-top: 32px;
+	padding-left: 16px;
+}
+.outer_content {
+	padding-top: 32px;
+	padding-left: 16px;
+}
+.outer_content p {
+	margin-left: 28px;
+}
+.outer_content ol {
+	margin: 10px;
+	line-height:145%;
+	font-size: 0.9em;
+}
+.outer_content ol li {
+	padding-top: 5px;
+}
+.agree {
+	margin-top: 5px !important;
+	padding-left:10px;
+	margin-right:10px;
+	line-height:145%;
+	font-size:1em !important;
+}
+.agree li {
+	list-style: lower-latin;
+	padding-top:0px !important;
+	margin-top:0px;
+}
+#footer {
+	position: relative;
+	width: 1000px;
+	text-align:center;
+	margin: 0 auto; 
+	margin-top: -3.4em;
+	border-bottom: 4px solid #7DA7A6;
+	border-top: 1px dotted #999;
+	padding: 16px 0px;
+}
+#footer p {
+	margin:0;
+	font-size:70%;
+}

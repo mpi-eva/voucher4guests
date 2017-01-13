@@ -1,0 +1,82 @@
+/*
+ * This file is part of voucher4guests.
+ *
+ * voucher4guests Project - An open source captive portal system
+ * Copyright (C) 2016. Alexander Müller, Lars Uhlemann
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+body {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.navbar {
+    margin-bottom: 20px;
+}
+
+
+/* Custom page footer */
+.footer {
+    margin-top: 30px;
+    padding-top: 12px;
+    color: #777;
+    border-top: 1px solid #e5e5e5;
+}
+
+
+
+/* DataTable Controls */
+td.details-control {
+    background: url('../images/details_open.png') no-repeat center center;
+    cursor: pointer;
+}
+tr.shown td.details-control {
+    background: url('../images/details_close.png') no-repeat center center;
+}
+
+
+table.innerTable tbody tr th, table.innerTable tbody tr td {
+    padding: 4px 8px;
+}
+
+.btn-toggle {
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+
+
+.box {
+    background-color: #f8f8f8;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 0px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px 15px;
+}
+
+.box-header h4 {
+    margin: 0;
+    font-size: 20px;
+}
+
+.box-header {
+    margin-bottom: 20px;
+}
+
+.box-footer {
+    margin-top: 40px;
+    margin-bottom: 30px;
+}
