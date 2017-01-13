@@ -31,6 +31,8 @@ guestnetwork:
 * run install.sh for copying project files to /usr/local/voucher4guests (default dir)
   and setup configuration
 
+* if you have already an voucher4guests installation follow the steps in the `doc\UPDATE_DETAILS.md`.
+
 ----
 
 ## setup firewall
@@ -100,3 +102,11 @@ voucher4guests is running now
     and replace the default one with your own institutes logo
   - now select the right voucher-(layer) validity and save it as jpg,
     and again for all other wished validities
+
+* backup the database 
+  - use the backup script in the `/scripts` folder 
+  - configure the backup path and set the database password in the script
+  - to run the script periodically, the following line must be in the `/etc/crontab`
+  
+  ```0 1    * * *   root    /bin/bash /usr/local/voucher4guests/scripts/db_backup.sh > /dev/null```
+
