@@ -8,7 +8,7 @@ current system.
 
 Save the files and configs from the install directory (default: `/usr/local/voucher4guests`).
 
-Create a backup of your database, you can run this command to create a complete dump.
+Create a backup of your database, you can run this command to write a snapshot of the database in a file.
 ```bash
 mysqldump -u db_user -p[password here] --opt voucher > backup.sql
 ```
@@ -47,12 +47,10 @@ Run the script with the following command:
 php update_schema.php
 ```
 
-After the database update the other components can work normally again.
-
 ## Update scripts
 
 To complete the update, check whether all configurations have been made 
-(e.g. `config/config.php` or `scripts/voucher.fw`). TO do that, 
+(e.g. `config/config.php` or `scripts/voucher.fw`). To do that, 
 check the installation steps in the `INSTALL.md` and `doc/INSTALL_DETAILS.md`.
 
 
