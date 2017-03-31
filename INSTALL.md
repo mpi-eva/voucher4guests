@@ -19,8 +19,6 @@
 * with working domain name service (dns)
 * INSTALL.md-> both can be optional installed on this voucher gateway
 
----
-
 ## base install steps
 
 * untar installation package
@@ -32,8 +30,6 @@
   and setup configuration
 
 * if you have already an voucher4guests installation follow the steps in the `doc\UPDATE_DETAILS.md`.
-
-----
 
 ## setup firewall
 
@@ -73,7 +69,6 @@ voucher4guests is running now
 * on the admin page your can select "Database" an you get a list of all generated
   vouchers
 
----
 ## customize the system
 
 * replace the placeholder logo with your own institute logo
