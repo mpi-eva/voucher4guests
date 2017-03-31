@@ -27,11 +27,11 @@
   apache2 php7.0 php7.0-cli php7.0-intl libapache2-mod-php7.0 mysql-server php7.0-mysql apache2-utils
 
 * run `install.sh` for copying project files to `/usr/local/voucher4guests` (default dir)
-  and setup configuration
+  and set up configuration
 
 * if you have already an voucher4guests installation follow the steps in the `doc\UPDATE_DETAILS.md`.
 
-## setup firewall
+## set up firewall
 
 * edit `scripts/voucher.fw` and change the networkinterface identifier (eg.: eth0 or
   eth1 for interface to guest network/or interface to internet uplink network)
