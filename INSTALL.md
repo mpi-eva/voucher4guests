@@ -23,7 +23,7 @@
 
 * untar installation package
 
-* install following software packages with apt-get:
+* install following software packages with apt:
   apache2 php7.0 php7.0-cli php7.0-intl libapache2-mod-php7.0 mysql-server php7.0-mysql apache2-utils
 
 * run `install.sh` for copying project files to `/usr/local/voucher4guests` (default dir)
