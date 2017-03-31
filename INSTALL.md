@@ -40,7 +40,7 @@
   optional managementinterface
 
 * IMPORTANT: ACTIVATE ssh ACCESS over internet uplink interface or guestnet interface
-  before you activate firewall. See voucher.fw for predefined entry's. PLEASE NOTE THAT
+  before you activate firewall. See voucher.fw for predefined entries. PLEASE NOTE THAT
   unrestricted ssh ACCESS over the guestnet and/or internet interface is not a good idea.
 
 * run `voucher.fw` (bash script) to activate the firewall
