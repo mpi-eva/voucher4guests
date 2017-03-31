@@ -109,4 +109,3 @@ voucher4guests is running now
   - to run the script periodically, the following line must be in the `/etc/crontab`
 
   ```0 1    * * *   root    /bin/bash /usr/local/voucher4guests/scripts/db_backup.sh > /dev/null```
-
