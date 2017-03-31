@@ -56,7 +56,7 @@ voucher4guests is running now
 
 ## first steps
 
-* create vouchers: go to https:/VOUCHERGATEWAY/admin and create over the web
+* create vouchers: go to https://VOUCHERGATEWAY/admin and create over the web
   frontend some vouchers
 
 * download and print this vouchers
