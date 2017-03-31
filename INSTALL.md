@@ -103,7 +103,7 @@ voucher4guests is running now
   - now select the right voucher-(layer) validity and save it as jpg,
     and again for all other wished validities
 
-* backup the database
+* back up the database
   - use the backup script in the `/scripts` folder
   - configure the backup path and set the database password in the script
   - to run the script periodically, the following line must be in the `/etc/crontab`
