@@ -15,7 +15,7 @@
 * php7.0 php7.0-cli php7.0-intl php7.0-xml php7.0-xmlrpc libapache2-mod-php7.0 mysql-server php7.0-mysql apache2-utils
 
 ### guestnetwork ###
-* with working dhcp service, dhcp relay service or static ip's
+* with working dhcp service, dhcp relay service or static IPs
 * with working domain name service (dns)
 * INSTALL.md-> both can be optional installed on this voucher gateway
 
