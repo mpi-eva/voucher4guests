@@ -26,14 +26,14 @@
 * install following software packages with apt-get:
   apache2 php7.0 php7.0-cli php7.0-intl libapache2-mod-php7.0 mysql-server php7.0-mysql apache2-utils
 
-* run install.sh for copying project files to /usr/local/voucher4guests (default dir)
+* run `install.sh` for copying project files to `/usr/local/voucher4guests` (default dir)
   and setup configuration
 
 * if you have already an voucher4guests installation follow the steps in the `doc\UPDATE_DETAILS.md`.
 
 ## setup firewall
 
-* edit scripts/voucher.fw and change the networkinterface identifier (eg.: eth0 or
+* edit `scripts/voucher.fw` and change the networkinterface identifier (eg.: eth0 or
   eth1 for interface to guest network/or interface to internet uplink network)
 
 * uncomment other features like NATing and/or management access over the
@@ -43,9 +43,9 @@
   before you activate firewall. See voucher.fw for predefined entry's. PLEASE NOTE THAT
   unrestricted ssh ACCESS over the guestnet and/or internet interface is not a good idea.
 
-* run voucher.fw (bash script) to activate the firewall
+* run `voucher.fw` (bash script) to activate the firewall
 
-* Please configure an firewall init script to start voucher.fw each time the voucher
+* Please configure an firewall init script to start `voucher.fw` each time the voucher
   system is restarted
 
 ---
@@ -72,25 +72,25 @@ voucher4guests is running now
 ## customize the system
 
 * replace the placeholder logo with your own institute logo
-  voucher/images/logo_en.jpg  |  voucher/images/logo_de.jpg    [use the same names]
+  `voucher/images/logo_en.jpg`  |  `voucher/images/logo_de.jpg`    [use the same names]
 
 * customize the written content of the web pages e.g. the footer with the institute name
-  voucher/language/en.php  |  voucher/language/de.php
+  `voucher/language/en.php`  |  `voucher/language/de.php`
 
 * customize or insert the wifi credentials on the vouchers
-  voucher_ssl/admin/pdf/create_voucher.php
+  `voucher_ssl/admin/pdf/create_voucher.php`
 
 * create voucher with custom validities
   - add a new validity with a sql-command in the database
     INSERT INTO validities (validity, description) VALUES ('2','2 days');
     [validity -> in days, description -> printed on the voucher]
   - add a background for the new voucher
-    voucher_ssl/admin/pdf/vorlagen/v[days].jpg     -- e.g. v2.jpg -> 2 days
+    `voucher_ssl/admin/pdf/vorlagen/v[days].jpg`     -- e.g. v2.jpg -> 2 days
     [width:1240px; height:877px resolution:300px/inch]
 
 * create you own voucher design
   - download and install free gimp software
-  - open "vorlagen_v4_1g.xcf" under /doc/misc
+  - open `vorlagen_v4_1g.xcf` under `/doc/misc`
   - now you get an mulitlayered Image
 
   - to include for example a new logo select the right layer
