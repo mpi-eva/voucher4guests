@@ -70,7 +70,7 @@ class VoucherControl
     public function deactivateVoucher()
     {
         $db = new Db($this->getDbConfig());
-        $result = $db->select("SELECT vid FROM vouchers WHERE canceled='0' AND (expiration_time<=NOW() AND expiration_time!=NULL)");
+        $result = $db->select("SELECT vid FROM vouchers WHERE canceled='0' AND (expiration_time<=NOW() AND expiration_time is not NULL)");
         foreach($result as $row) {
 
 
@@ -87,10 +87,10 @@ class VoucherControl
                 exec("sudo /sbin/iptables -D GUEST -t nat -m mac --mac-source $mac -j ACCEPT");
 
                 print "Eintrag aus Firewall gelöscht: VID=".$row['vid'].", MAC=".$mac."\n";
-                #mark this voucher as canceled in database
-                $update = $db->query("UPDATE vouchers SET canceled = '1' WHERE vid='" . $row['vid'] . "'");
-                print "This voucher is canceled (expired): VID=".$row['vid']."\n";
             }
+        #mark this voucher as canceled in database
+        $update = $db->query("UPDATE vouchers SET canceled = '1' WHERE vid='" . $row['vid'] . "'");
+        print "This voucher is canceled (expired): VID=".$row['vid']."\n";
         }
     }
 
@@ -102,7 +102,7 @@ class VoucherControl
     public function deactivateUnusedVoucher()
     {
         $db = new Db($this->getDbConfig());
-        $result = $db->select("SELECT vid FROM vouchers WHERE canceled='0' AND  (activation_time=NULL AND use_by_date<=NOW())");
+        $result = $db->select("SELECT vid FROM vouchers WHERE canceled='0' AND  (activation_time is NULL AND use_by_date<=NOW())");
         foreach($result as $row) {
             #mark this voucher as canceled in database
             $update = $db->query("UPDATE vouchers SET canceled = '1' WHERE vid='" . $row['vid'] . "'");
@@ -138,7 +138,7 @@ class VoucherControl
 
         $expiration_time = "DATE_SUB(NOW(), INTERVAL ".$config['voucher_retention_period'].")";
 
-        $result = $db->select("SELECT vid, expiration_time FROM vouchers WHERE canceled='1' AND (expiration_time<= ".$expiration_time.")");
+        $result = $db->select("SELECT vid, expiration_time FROM vouchers WHERE canceled='1' AND ((expiration_time<= ".$expiration_time.") OR (use_by_date<= ".$expiration_time."))");
         foreach($result as $row) {
 
             $delete_mac = $db->query("DELETE FROM mac_addresses WHERE vid='" . $row['vid'] . "'");
