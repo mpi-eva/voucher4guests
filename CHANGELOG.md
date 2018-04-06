@@ -1,5 +1,8 @@
 # Changelog
 
+### 2.0a
+- bug fix in voucher lifecycle management
+
 ### 2.0
 - rewrite code
 - new ui design
